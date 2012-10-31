@@ -7,7 +7,6 @@
     <version>2.0.36</version>
     <packaging>jar</packaging>
     <name>VoxelBorder</name>
-    <description>A border plugin</description>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -124,37 +123,6 @@
                     <tagNameFormat>@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
-            
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>1.6</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-						    <minimizeJar>true</minimizeJar>
-							<artifactSet>
-								<excludes>
-								    <exclude>org.bukkit:craftbukkit</exclude>
-								    <exclude>org.bukkit:bukkit</exclude>
-								    <exclude>com.patrickanker:libpsanker</exclude>
-								    <exclude>junit:junit</exclude>
-							    </excludes>
-							</artifactSet>
-							<relocations>
-				              	<relocation>
-				                  <pattern>com.google.gson</pattern>
-				                  <shadedPattern>com.thevoxelbox.voxelguest.libs.com.google.gson</shadedPattern>
-				                </relocation>
-							</relocations>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>            
         </plugins>
     </build>
 </project>
