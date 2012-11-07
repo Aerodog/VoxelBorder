@@ -1,4 +1,4 @@
-package com.thevoxelbox.bukkit.border;
+package com.thevoxelbox.voxelborder;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

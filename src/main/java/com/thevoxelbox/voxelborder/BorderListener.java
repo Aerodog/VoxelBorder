@@ -1,6 +1,7 @@
-package com.thevoxelbox.bukkit.border;
+package com.thevoxelbox.voxelborder;
 
-import com.thevoxelbox.bukkit.border.util.Admin;
+import com.thevoxelbox.voxelborder.util.Admin;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.thevoxelbox.bukkit.border.util;
+package com.thevoxelbox.voxelborder.util;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -9,7 +9,7 @@ import java.util.TreeSet;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import com.thevoxelbox.bukkit.border.VoxelBorder;
+import com.thevoxelbox.voxelborder.VoxelBorder;
 
 /**
  *

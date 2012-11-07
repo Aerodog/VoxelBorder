@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.thevoxelbox.bukkit.border;
+package com.thevoxelbox.voxelborder;
 
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.event.EventHandler;

@@ -2,9 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.thevoxelbox.bukkit.border;
+package com.thevoxelbox.voxelborder;
 
-import com.thevoxelbox.bukkit.border.util.Admin;
+import com.thevoxelbox.voxelborder.util.Admin;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import org.bukkit.Bukkit;
