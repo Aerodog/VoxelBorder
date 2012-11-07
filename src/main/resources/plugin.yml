@@ -1,6 +1,6 @@
 name: VoxelBorder
 main: com.thevoxelbox.bukkit.border.VoxelBorder
-version: MAVEN_VERSION
+version: maven-version-number
 website: http://thevoxelbox.com
 author: przerwap
 description: >
