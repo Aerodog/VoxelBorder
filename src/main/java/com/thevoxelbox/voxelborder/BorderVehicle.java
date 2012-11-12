@@ -18,13 +18,13 @@ public class BorderVehicle implements Listener {
     @EventHandler
     public void onVehicleMove(VehicleMoveEvent event) {
         if (event.getVehicle().getPassenger() instanceof Player) {
-            Player player = ((Player) event.getVehicle().getPassenger());
-            if (BorderListener.zones.containsKey(event.getTo().getWorld().getUID())) {
-                for (Zone z : BorderListener.zones.get(event.getTo().getWorld().getUID())) {
-                    if (z.deny(event.getFrom(), event.getTo(), player)) {
-                        Entity e = event.getVehicle().getPassenger();
+            Player _player = ((Player) event.getVehicle().getPassenger());
+            if (BorderListener.getZones().containsKey(event.getTo().getWorld().getUID())) {
+                for (Zone _zone : BorderListener.getZones().get(event.getTo().getWorld().getUID())) {
+                    if (_zone.deny(event.getFrom(), event.getTo(), _player)) {
+                        Entity entity = event.getVehicle().getPassenger();
                         event.getVehicle().eject();
-                        e.teleport(event.getFrom(), TeleportCause.PLUGIN);
+                        entity.teleport(event.getFrom(), TeleportCause.PLUGIN);
                     }
                 }
             }
@@ -34,14 +34,14 @@ public class BorderVehicle implements Listener {
     @EventHandler
     public void onVehicleEnter(VehicleEnterEvent event) {
         if (event.getEntered() instanceof Player) {
-            Player player = ((Player) event.getEntered());
-            if (BorderListener.zones.containsKey(event.getEntered().getWorld().getUID())) {
-                for (Zone z : BorderListener.zones.get(event.getEntered().getWorld().getUID())) {
-                    Location f = event.getEntered().getLocation();
-                    Location t = event.getVehicle().getLocation();
-                    if (z.deny(f, t, player)) {
+            Player _player = ((Player) event.getEntered());
+            if (BorderListener.getZones().containsKey(event.getEntered().getWorld().getUID())) {
+                for (Zone _z : BorderListener.getZones().get(event.getEntered().getWorld().getUID())) {
+                    Location _startLoc = event.getEntered().getLocation();
+                    Location _vehicleLoc = event.getVehicle().getLocation();
+                    if (_z.deny(_startLoc, _vehicleLoc, _player)) {
                         event.getVehicle().eject();
-                        event.getEntered().teleport(f, TeleportCause.PLUGIN);
+                        event.getEntered().teleport(_startLoc, TeleportCause.PLUGIN);
                         event.setCancelled(true);
                     }
                 }

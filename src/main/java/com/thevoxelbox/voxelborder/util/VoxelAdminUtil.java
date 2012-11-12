@@ -15,7 +15,7 @@ import com.thevoxelbox.voxelborder.VoxelBorder;
  *
  * @author Voxel
  */
-public class Admin {
+public class VoxelAdminUtil {
 
     private static TreeMap<Integer, TreeSet<String>> lists = new TreeMap<Integer, TreeSet<String>>();
     private static TreeMap<Integer, vList> infos = new TreeMap<Integer, vList>();

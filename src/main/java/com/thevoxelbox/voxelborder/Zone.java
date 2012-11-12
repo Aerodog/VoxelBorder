@@ -1,10 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.thevoxelbox.voxelborder;
 
-import com.thevoxelbox.voxelborder.util.Admin;
+import com.thevoxelbox.voxelborder.util.VoxelAdminUtil;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -75,8 +71,8 @@ public class Zone {
         write(pw, outTP);
     }
 
-    private void write(PrintWriter pw, String value) {
-        pw.println("\t" + value);
+    private void write(PrintWriter pw, String str) {
+        pw.println("\t" + str);
     }
 
     private void write(PrintWriter pw, int[] ar) {
@@ -84,19 +80,19 @@ public class Zone {
             write(pw, "\t*");
             return;
         }
-        for (int i = 0; i < ar.length; i++) {
-            write(pw, "\t" + Admin.getListName(ar[i]));
+        for (int _i = 0; _i < ar.length; _i++) {
+            write(pw, "\t" + VoxelAdminUtil.getListName(ar[_i]));
         }
     }
 
-    public void read(String param, String value) {
-        param = param.trim();
+    public void read(String _param, String value) {
+        _param = _param.trim();
         value = value.trim();
-        if (param.equals("name")) {
+        if (_param.equals("name")) {
             name = value;
-        } else if (param.equals("world")) {
+        } else if (_param.equals("world")) {
             world = value;
-        } else if (param.equals("in")) {
+        } else if (_param.equals("in")) {
             if (temp == null) {
                 temp = new ArrayList<Integer>();
             }
@@ -104,8 +100,8 @@ public class Zone {
                 in = null;
                 return;
             }
-            temp.add(Admin.getListID(value));
-        } else if (param.equals("out")) {
+            temp.add(VoxelAdminUtil.getListID(value));
+        } else if (_param.equals("out")) {
             if (temp == null) {
                 temp = new ArrayList<Integer>();
             } else {
@@ -113,8 +109,8 @@ public class Zone {
                     in = null;
                 } else {
                     in = new int[temp.size()];
-                    for (int i = 0; i < temp.size(); i++) {
-                        in[i] = temp.get(i);
+                    for (int _i = 0; _i < temp.size(); _i++) {
+                        in[_i] = temp.get(_i);
                     }
                 }
                 temp.clear();
@@ -123,8 +119,8 @@ public class Zone {
                 out = null;
                 return;
             }
-            temp.add(Admin.getListID(value));
-        } else if (param.equals("inTP")) {
+            temp.add(VoxelAdminUtil.getListID(value));
+        } else if (_param.equals("inTP")) {
             if (temp == null) {
                 temp = new ArrayList<Integer>();
             } else {
@@ -132,8 +128,8 @@ public class Zone {
                     out = null;
                 } else {
                     out = new int[temp.size()];
-                    for (int i = 0; i < temp.size(); i++) {
-                        out[i] = temp.get(i);
+                    for (int _i = 0; _i < temp.size(); _i++) {
+                        out[_i] = temp.get(_i);
                     }
                 }
                 temp.clear();
@@ -142,8 +138,8 @@ public class Zone {
                 inTP = null;
                 return;
             }
-            temp.add(Admin.getListID(value));
-        } else if (param.equals("outTP")) {
+            temp.add(VoxelAdminUtil.getListID(value));
+        } else if (_param.equals("outTP")) {
             if (temp == null) {
                 temp = new ArrayList<Integer>();
             } else {
@@ -151,8 +147,8 @@ public class Zone {
                     inTP = null;
                 } else {
                     inTP = new int[temp.size()];
-                    for (int i = 0; i < temp.size(); i++) {
-                        inTP[i] = temp.get(i);
+                    for (int _i = 0; _i < temp.size(); _i++) {
+                        inTP[_i] = temp.get(_i);
                     }
                 }
                 temp.clear();
@@ -161,30 +157,30 @@ public class Zone {
                 outTP = null;
                 return;
             }
-            temp.add(Admin.getListID(value));
-        } else if (param.equals("highx")) {
+            temp.add(VoxelAdminUtil.getListID(value));
+        } else if (_param.equals("highx")) {
             highx = Integer.parseInt(value);
-        } else if (param.equals("highz")) {
+        } else if (_param.equals("highz")) {
             highz = Integer.parseInt(value);
-        } else if (param.equals("lowx")) {
+        } else if (_param.equals("lowx")) {
             lowx = Integer.parseInt(value);
-        } else if (param.equals("lowz")) {
+        } else if (_param.equals("lowz")) {
             lowz = Integer.parseInt(value);
-        } else if (param.equals("inmsg")) {
+        } else if (_param.equals("inmsg")) {
             inmessage = (value.equals("null") ? null : value);
-        } else if (param.equals("indeny")) {
+        } else if (_param.equals("indeny")) {
             indeny = (value.equals("null") ? null : value);
-        } else if (param.equals("outmsg")) {
+        } else if (_param.equals("outmsg")) {
             outmessage = (value.equals("null") ? null : value);
-        } else if (param.equals("outdeny")) {
+        } else if (_param.equals("outdeny")) {
             outdeny = (value.equals("null") ? null : value);
-        } else if (param.equals("inTPmsg")) {
+        } else if (_param.equals("inTPmsg")) {
             inTPmessage = (value.equals("null") ? null : value);
-        } else if (param.equals("inTPdeny")) {
+        } else if (_param.equals("inTPdeny")) {
             inTPdeny = (value.equals("null") ? null : value);
-        } else if (param.equals("outTPmsg")) {
+        } else if (_param.equals("outTPmsg")) {
             outTPmessage = (value.equals("null") ? null : value);
-        } else if (param.equals("outTPdeny")) {
+        } else if (_param.equals("outTPdeny")) {
             outTPdeny = (value.equals("null") ? null : value);
         }
     }
@@ -194,8 +190,8 @@ public class Zone {
             outTP = null;
         } else {
             outTP = new int[temp.size()];
-            for (int i = 0; i < temp.size(); i++) {
-                outTP[i] = temp.get(i);
+            for (int _i = 0; _i < temp.size(); _i++) {
+                outTP[_i] = temp.get(_i);
             }
         }
         temp.clear();
@@ -278,38 +274,38 @@ public class Zone {
                 && z <= highz;
     }
 
-    private void send(String msg, Player p) {
+    private void send(String msg, Player player) {
         if (msg == null) {
-            p.sendMessage(ChatColor.GOLD + "Now crossing the border of " + name);
+            player.sendMessage(ChatColor.GOLD + "Now crossing the border of " + name.trim());
         } else {
-            p.sendMessage(msg);
+            player.sendMessage(msg);
         }
     }
 
-    private void sendDeny(String msg, Player p) {
+    private void sendDeny(String msg, Player player) {
         if (msg == null) {
-            p.sendMessage(ChatColor.DARK_GREEN + "You may not cross the border of " + name);
+            player.sendMessage(ChatColor.DARK_GREEN + "You may not cross the border of " + name.trim());
         } else {
-            p.sendMessage(msg);
+            player.sendMessage(msg);
         }
     }
 
-    public boolean deny(Location from, Location to, Player p) {
+    public boolean deny(Location from, Location to, Player player) {
         if (inInnerBound(from)) {
             if (inInnerBound(to)) {
                 return false;
             } else {
                 if (out == null) {
-                    sendDeny(outdeny, p);
+                    sendDeny(outdeny, player);
                     return true;
                 } else {
-                    String pname = p.getName();
+                    String pname = player.getName();
                     for (int i : out) {
-                        if (Admin.contains(i, pname)) {
+                        if (VoxelAdminUtil.contains(i, pname)) {
                             return false;
                         }
                     }
-                    sendDeny(outdeny, p);
+                    sendDeny(outdeny, player);
                     return true;
                 }
             }
@@ -320,51 +316,51 @@ public class Zone {
                     return false;
                 } else {
                     if (out == null) {
-                        sendDeny(outdeny, p);
-                        p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), TeleportCause.ENDER_PEARL);
+                        sendDeny(outdeny, player);
+                        player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), TeleportCause.ENDER_PEARL);
                         return false;
                     } else {
-                        String pname = p.getName();
-                        for (int i : out) {
-                            if (Admin.contains(i, pname)) {
+                        String pname = player.getName();
+                        for (int _i : out) {
+                            if (VoxelAdminUtil.contains(_i, pname)) {
                                 return false;
                             }
                         }
-                        sendDeny(outdeny, p);
-                        p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), TeleportCause.ENDER_PEARL);
+                        sendDeny(outdeny, player);
+                        player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation(), TeleportCause.ENDER_PEARL);
                         return false;
                     }
                 }
             } else {
                 if (out == null) {
-                    sendDeny(outdeny, p);
+                    sendDeny(outdeny, player);
                     return true;
                 } else {
-                    String pname = p.getName();
-                    for (int i : out) {
-                        if (Admin.contains(i, pname)) {
-                            send(outmessage, p);
+                    String _playerName = player.getName();
+                    for (int _i : out) {
+                        if (VoxelAdminUtil.contains(_i, _playerName)) {
+                            send(outmessage, player);
                             return false;
                         }
                     }
-                    sendDeny(outdeny, p);
+                    sendDeny(outdeny, player);
                     return true;
                 }
             }
         } else {
             if (inBound(to)) {
                 if (in == null) {
-                    sendDeny(indeny, p);
+                    sendDeny(indeny, player);
                     return true;
                 } else {
-                    String pname = p.getName();
+                    String _playerName = player.getName();
                     for (int i : in) {
-                        if (Admin.contains(i, pname)) {
-                            send(inmessage, p);
+                        if (VoxelAdminUtil.contains(i, _playerName)) {
+                            send(inmessage, player);
                             return false;
                         }
                     }
-                    sendDeny(indeny, p);
+                    sendDeny(indeny, player);
                     return true;
                 }
             } else {
@@ -373,40 +369,40 @@ public class Zone {
         }
     }
 
-    public boolean denyTP(Location from, Location to, Player p) {
+    public boolean denyTP(Location from, Location to, Player player) {
         if (inBound(from)) {
             if (inBound(to)) {
                 return false;
             } else {
                 if (outTP == null) {
-                    sendDeny(outTPdeny, p);
+                    sendDeny(outTPdeny, player);
                     return true;
                 } else {
-                    String pname = p.getName();
-                    for (int i : outTP) {
-                        if (Admin.contains(i, pname)) {
-                            send(outTPmessage, p);
+                    String _playerName = player.getName();
+                    for (int _i : outTP) {
+                        if (VoxelAdminUtil.contains(_i, _playerName)) {
+                            send(outTPmessage, player);
                             return false;
                         }
                     }
-                    sendDeny(outTPdeny, p);
+                    sendDeny(outTPdeny, player);
                     return true;
                 }
             }
         } else {
             if (inBound(to)) {
                 if (inTP == null) {
-                    sendDeny(inTPdeny, p);
+                    sendDeny(inTPdeny, player);
                     return true;
                 } else {
-                    String pname = p.getName();
+                    String pname = player.getName();
                     for (int i : inTP) {
-                        if (Admin.contains(i, pname)) {
-                            send(inTPmessage, p);
+                        if (VoxelAdminUtil.contains(i, pname)) {
+                            send(inTPmessage, player);
                             return false;
                         }
                     }
-                    sendDeny(inTPdeny, p);
+                    sendDeny(inTPdeny, player);
                     return true;
                 }
             } else {
@@ -415,20 +411,20 @@ public class Zone {
         }
     }
 
-    public boolean denyTPfrom(Location from, Player p) {
+    public boolean denyTPfrom(Location from, Player player) {
         if (inBound(from)) {
             if (outTP == null) {
-                sendDeny(outTPdeny, p);
+                sendDeny(outTPdeny, player);
                 return true;
             } else {
-                String pname = p.getName();
-                for (int i : outTP) {
-                    if (Admin.contains(i, pname)) {
-                        send(outTPmessage, p);
+                String pname = player.getName();
+                for (int _i : outTP) {
+                    if (VoxelAdminUtil.contains(_i, pname)) {
+                        send(outTPmessage, player);
                         return false;
                     }
                 }
-                sendDeny(outTPdeny, p);
+                sendDeny(outTPdeny, player);
                 return true;
             }
         } else {
@@ -436,20 +432,20 @@ public class Zone {
         }
     }
 
-    public boolean denyTPto(Location to, Player p) {
+    public boolean denyTPto(Location to, Player player) {
         if (inBound(to)) {
             if (inTP == null) {
-                sendDeny(inTPdeny, p);
+                sendDeny(inTPdeny, player);
                 return true;
             } else {
-                String pname = p.getName();
+                String pname = player.getName();
                 for (int i : inTP) {
-                    if (Admin.contains(i, pname)) {
-                        send(inTPmessage, p);
+                    if (VoxelAdminUtil.contains(i, pname)) {
+                        send(inTPmessage, player);
                         return false;
                     }
                 }
-                sendDeny(inTPdeny, p);
+                sendDeny(inTPdeny, player);
                 return true;
             }
         } else {

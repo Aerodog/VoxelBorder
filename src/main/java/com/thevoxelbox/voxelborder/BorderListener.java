@@ -1,6 +1,6 @@
 package com.thevoxelbox.voxelborder;
 
-import com.thevoxelbox.voxelborder.util.Admin;
+import com.thevoxelbox.voxelborder.util.VoxelAdminUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,9 +33,17 @@ import org.bukkit.event.player.PlayerTeleportEvent;
  */
 public class BorderListener implements Listener {
 
-    public static TreeMap<UUID, ArrayList<Zone>> zones = new TreeMap<UUID, ArrayList<Zone>>();
+    private static TreeMap<UUID, ArrayList<Zone>> zones = new TreeMap<UUID, ArrayList<Zone>>();
 
-    public void init() {
+    public static TreeMap<UUID, ArrayList<Zone>> getZones() {
+		return zones;
+	}
+
+	public static void setZones(TreeMap<UUID, ArrayList<Zone>> zones) {
+		BorderListener.zones = zones;
+	}
+
+	public void init() {
         try {
             readData();
         } catch (FileNotFoundException ex) {
@@ -58,8 +66,8 @@ public class BorderListener implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (zones.containsKey(event.getTo().getWorld().getUID())) {
-            for (Zone z : zones.get(event.getTo().getWorld().getUID())) {
+        if (getZones().containsKey(event.getTo().getWorld().getUID())) {
+            for (Zone z : getZones().get(event.getTo().getWorld().getUID())) {
                 if (z.deny(event.getFrom(), event.getTo(), event.getPlayer())) {
                     event.getPlayer().teleport(event.getFrom(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }
@@ -73,17 +81,17 @@ public class BorderListener implements Listener {
             return;
         }
         if (event.getFrom().getWorld().equals(event.getTo().getWorld())) {
-            if (zones.containsKey(event.getFrom().getWorld().getUID())) {
-                for (Zone z : zones.get(event.getTo().getWorld().getUID())) {
-                    if (z.denyTP(event.getFrom(), event.getTo(), event.getPlayer())) {
+            if (getZones().containsKey(event.getFrom().getWorld().getUID())) {
+                for (Zone _zone : getZones().get(event.getTo().getWorld().getUID())) {
+                    if (_zone.denyTP(event.getFrom(), event.getTo(), event.getPlayer())) {
                         event.setCancelled(true);
                     }
                 }
             }
         } else {
-            if (zones.containsKey(event.getTo().getWorld().getUID())) {
-                for (Zone z : zones.get(event.getTo().getWorld().getUID())) {
-                    if (z.denyTPto(event.getTo(), event.getPlayer())) {
+            if (getZones().containsKey(event.getTo().getWorld().getUID())) {
+                for (Zone _zone : getZones().get(event.getTo().getWorld().getUID())) {
+                    if (_zone.denyTPto(event.getTo(), event.getPlayer())) {
                         event.setCancelled(true);
                     }
                 }
@@ -92,245 +100,245 @@ public class BorderListener implements Listener {
     }
 
     public static void saveData() throws FileNotFoundException {
-        File f = new File("plugins/VoxelBorder/borders.config");
-        if (!f.exists()) {
-            f.getParentFile().mkdirs();
+        File _configFile = new File("plugins/VoxelBorder/borders.config");
+        if (!_configFile.exists()) {
+            _configFile.getParentFile().mkdirs();
             try {
-                f.createNewFile();
+                _configFile.createNewFile();
             } catch (IOException ex) {
                 Logger.getLogger(BorderListener.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        PrintWriter pw = new PrintWriter(f);
-        pw.println("#VoxelBorder 2.0 Configuration");
+        PrintWriter _writer = new PrintWriter(_configFile);
+        _writer.println("#VoxelBorder 2.0 Configuration");
         for (ChatColor cc : ChatColor.values()) {
-            pw.println("# " + cc.name() + "  -  " + cc.toString());
+            _writer.println("# " + cc.name() + "  -  " + cc.toString());
         }
-        Map<String, String> lists = Admin.getNamePath();
-        if (lists.isEmpty()) {
-            pw.println("Lists:");
-            pw.println("\t*");
+        Map<String, String> _lists = VoxelAdminUtil.getNamePath();
+        if (_lists.isEmpty()) {
+            _writer.println("Lists:");
+            _writer.println("\t*");
         } else {
-            pw.println("Lists:");
-            for (Entry<String, String> en : lists.entrySet()) {
-                pw.println("List:");
-                pw.println("\tname: " + en.getKey());
-                pw.println("\tpath: " + en.getValue());
+            _writer.println("Lists:");
+            for (Entry<String, String> en : _lists.entrySet()) {
+                _writer.println("List:");
+                _writer.println("\tname: " + en.getKey());
+                _writer.println("\tpath: " + en.getValue());
             }
         }
-        if (!zones.isEmpty()) {
-            for (ArrayList<Zone> ar : zones.values()) {
-                for (Zone z : ar) {
-                    z.save(pw);
+        if (!getZones().isEmpty()) {
+            for (ArrayList<Zone> ar : getZones().values()) {
+                for (Zone _z : ar) {
+                    _z.save(_writer);
                 }
             }
         }
-        pw.close();
+        _writer.close();
         VoxelBorder.log.info("[VoxelBorder] Configuration saved!");
     }
 
     private void readData() throws FileNotFoundException {
-        File f = new File("plugins/VoxelBorder/borders.config");
-        if (!f.exists()) {
-            f.getParentFile().mkdirs();
+        File _configFile = new File("plugins/VoxelBorder/borders.config");
+        if (!_configFile.exists()) {
+            _configFile.getParentFile().mkdirs();
             try {
-                f.createNewFile();
+                _configFile.createNewFile();
                 saveData();
                 return;
             } catch (IOException ex) {
                 Logger.getLogger(BorderListener.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        Scanner s = new Scanner(f);
-        String line = "";
-        while (s.hasNext()) {
-            if (line.startsWith("#")) {
-                line = s.nextLine().trim();
+        Scanner _scan = new Scanner(_configFile);
+        String _line = "";
+        while (_scan.hasNext()) {
+            if (_line.startsWith("#")) {
+                _line = _scan.nextLine().trim();
                 continue;
-            } else if (line.startsWith("Lists")) {
-                line = s.nextLine().trim();
-                if (line.equals("*")) {
-                    line = s.nextLine().trim();
+            } else if (_line.startsWith("Lists")) {
+                _line = _scan.nextLine().trim();
+                if (_line.equals("*")) {
+                    _line = _scan.nextLine().trim();
                     continue;
                 }
-                while (!line.startsWith("Border")) {
-                    if (line.startsWith("List")) {
-                        line = s.nextLine().trim();
+                while (!_line.startsWith("Border")) {
+                    if (_line.startsWith("List")) {
+                        _line = _scan.nextLine().trim();
                         String lname = null;
-                        if (line.startsWith("name")) {
-                            lname = line.split(":")[1].trim();
-                            line = s.nextLine().trim();
+                        if (_line.startsWith("name")) {
+                            lname = _line.split(":")[1].trim();
+                            _line = _scan.nextLine().trim();
                         }
-                        if (line.startsWith("path")) {
-                            Admin.readList(line.split(":")[1].trim(), lname);
+                        if (_line.startsWith("path")) {
+                            VoxelAdminUtil.readList(_line.split(":")[1].trim(), lname);
                         }
-                        if (!s.hasNext()) {
+                        if (!_scan.hasNext()) {
                             break;
                         }
-                        line = s.nextLine().trim();
+                        _line = _scan.nextLine().trim();
                     } else {
                         break;
                     }
                 }
                 continue;
-            } else if (line.startsWith("Border")) {
-                line = s.nextLine().trim();
-                Zone z = null;
-                if (line.startsWith("name")) {
-                    z = new Zone(line.split(":")[1]);
-                    line = s.nextLine().trim();
+            } else if (_line.startsWith("Border")) {
+                _line = _scan.nextLine().trim();
+                Zone _zone = null;
+                if (_line.startsWith("name")) {
+                    _zone = new Zone(_line.split(":")[1]);
+                    _line = _scan.nextLine().trim();
                 }
-                if (line.startsWith("world")) {
-                    String[] spl = line.split(":");
-                    z.read(spl[0], spl[1]);
-                    line = s.nextLine().trim();
+                if (_line.startsWith("world")) {
+                    String[] spl = _line.split(":");
+                    _zone.read(spl[0], spl[1]);
+                    _line = _scan.nextLine().trim();
                 }
-                if (line.startsWith("highx")) {
-                    String[] spl = line.split(":");
-                    z.read(spl[0], spl[1]);
-                    line = s.nextLine().trim();
+                if (_line.startsWith("highx")) {
+                    String[] spl = _line.split(":");
+                    _zone.read(spl[0], spl[1]);
+                    _line = _scan.nextLine().trim();
                 }
-                if (line.startsWith("highz")) {
-                    String[] spl = line.split(":");
-                    z.read(spl[0], spl[1]);
-                    line = s.nextLine().trim();
+                if (_line.startsWith("highz")) {
+                    String[] spl = _line.split(":");
+                    _zone.read(spl[0], spl[1]);
+                    _line = _scan.nextLine().trim();
                 }
-                if (line.startsWith("lowx")) {
-                    String[] spl = line.split(":");
-                    z.read(spl[0], spl[1]);
-                    line = s.nextLine().trim();
+                if (_line.startsWith("lowx")) {
+                    String[] spl = _line.split(":");
+                    _zone.read(spl[0], spl[1]);
+                    _line = _scan.nextLine().trim();
                 }
-                if (line.startsWith("lowz")) {
-                    String[] spl = line.split(":");
-                    z.read(spl[0], spl[1]);
-                    line = s.nextLine().trim();
+                if (_line.startsWith("lowz")) {
+                    String[] spl = _line.split(":");
+                    _zone.read(spl[0], spl[1]);
+                    _line = _scan.nextLine().trim();
                 }
-                if (line.startsWith("inmsg")) {
-                    String[] spl = line.split(":");
-                    z.read(spl[0], spl[1]);
-                    line = s.nextLine().trim();
+                if (_line.startsWith("inmsg")) {
+                    String[] spl = _line.split(":");
+                    _zone.read(spl[0], spl[1]);
+                    _line = _scan.nextLine().trim();
                 }
-                if (line.startsWith("indeny")) {
-                    String[] spl = line.split(":");
-                    z.read(spl[0], spl[1]);
-                    line = s.nextLine().trim();
+                if (_line.startsWith("indeny")) {
+                    String[] spl = _line.split(":");
+                    _zone.read(spl[0], spl[1]);
+                    _line = _scan.nextLine().trim();
                 }
-                if (line.startsWith("outmsg")) {
-                    String[] spl = line.split(":");
-                    z.read(spl[0], spl[1]);
-                    line = s.nextLine().trim();
+                if (_line.startsWith("outmsg")) {
+                    String[] spl = _line.split(":");
+                    _zone.read(spl[0], spl[1]);
+                    _line = _scan.nextLine().trim();
                 }
-                if (line.startsWith("outdeny")) {
-                    String[] spl = line.split(":");
-                    z.read(spl[0], spl[1]);
-                    line = s.nextLine().trim();
+                if (_line.startsWith("outdeny")) {
+                    String[] spl = _line.split(":");
+                    _zone.read(spl[0], spl[1]);
+                    _line = _scan.nextLine().trim();
                 }
-                if (line.startsWith("inTPmsg")) {
-                    String[] spl = line.split(":");
-                    z.read(spl[0], spl[1]);
-                    line = s.nextLine().trim();
+                if (_line.startsWith("inTPmsg")) {
+                    String[] spl = _line.split(":");
+                    _zone.read(spl[0], spl[1]);
+                    _line = _scan.nextLine().trim();
                 }
-                if (line.startsWith("inTPdeny")) {
-                    String[] spl = line.split(":");
-                    z.read(spl[0], spl[1]);
-                    line = s.nextLine().trim();
+                if (_line.startsWith("inTPdeny")) {
+                    String[] spl = _line.split(":");
+                    _zone.read(spl[0], spl[1]);
+                    _line = _scan.nextLine().trim();
                 }
-                if (line.startsWith("outTPmsg")) {
-                    String[] spl = line.split(":");
-                    z.read(spl[0], spl[1]);
-                    line = s.nextLine().trim();
+                if (_line.startsWith("outTPmsg")) {
+                    String[] spl = _line.split(":");
+                    _zone.read(spl[0], spl[1]);
+                    _line = _scan.nextLine().trim();
                 }
-                if (line.startsWith("outTPdeny")) {
-                    String[] spl = line.split(":");
-                    z.read(spl[0], spl[1]);
-                    line = s.nextLine().trim();
+                if (_line.startsWith("outTPdeny")) {
+                    String[] spl = _line.split(":");
+                    _zone.read(spl[0], spl[1]);
+                    _line = _scan.nextLine().trim();
                 }
-                if (line.startsWith("in")) {
-                    line = s.nextLine().trim();
-                    if (line.equals("*")) {
-                        z.read("in", "*");
-                        line = s.nextLine().trim();
+                if (_line.startsWith("in")) {
+                    _line = _scan.nextLine().trim();
+                    if (_line.equals("*")) {
+                        _zone.read("in", "*");
+                        _line = _scan.nextLine().trim();
                     } else {
-                        while (!line.contains(":")) {
-                            z.read("in", line);
-                            if (!s.hasNext()) {
+                        while (!_line.contains(":")) {
+                            _zone.read("in", _line);
+                            if (!_scan.hasNext()) {
                                 break;
                             }
-                            line = s.nextLine().trim();
+                            _line = _scan.nextLine().trim();
                         }
                     }
                 }
-                if (line.startsWith("out")) {
-                    line = s.nextLine().trim();
-                    if (line.equals("*")) {
-                        z.read("out", "*");
-                        line = s.nextLine().trim();
+                if (_line.startsWith("out")) {
+                    _line = _scan.nextLine().trim();
+                    if (_line.equals("*")) {
+                        _zone.read("out", "*");
+                        _line = _scan.nextLine().trim();
                     } else {
-                        while (!line.contains(":")) {
-                            z.read("out", line);
-                            if (!s.hasNext()) {
+                        while (!_line.contains(":")) {
+                            _zone.read("out", _line);
+                            if (!_scan.hasNext()) {
                                 break;
                             }
-                            line = s.nextLine().trim();
+                            _line = _scan.nextLine().trim();
                         }
                     }
                 }
-                if (line.startsWith("inTP")) {
-                    line = s.nextLine().trim();
-                    if (line.equals("*")) {
-                        z.read("inTP", "*");
-                        line = s.nextLine().trim();
+                if (_line.startsWith("inTP")) {
+                    _line = _scan.nextLine().trim();
+                    if (_line.equals("*")) {
+                        _zone.read("inTP", "*");
+                        _line = _scan.nextLine().trim();
                     } else {
-                        while (!line.contains(":")) {
-                            z.read("inTP", line);
-                            if (!s.hasNext()) {
+                        while (!_line.contains(":")) {
+                            _zone.read("inTP", _line);
+                            if (!_scan.hasNext()) {
                                 break;
                             }
-                            line = s.nextLine().trim();
+                            _line = _scan.nextLine().trim();
                         }
                     }
                 }
-                if (line.startsWith("outTP")) {
-                    line = s.nextLine().trim();
-                    if (line.equals("*")) {
-                        z.read("outTP", "*");
-                        if (s.hasNext()) {
-                            line = s.nextLine().trim();
+                if (_line.startsWith("outTP")) {
+                    _line = _scan.nextLine().trim();
+                    if (_line.equals("*")) {
+                        _zone.read("outTP", "*");
+                        if (_scan.hasNext()) {
+                            _line = _scan.nextLine().trim();
                         }
                     } else {
-                        while (!line.contains(":")) {
-                            z.read("outTP", line);
-                            if (!s.hasNext()) {
+                        while (!_line.contains(":")) {
+                            _zone.read("outTP", _line);
+                            if (!_scan.hasNext()) {
                                 break;
                             }
-                            line = s.nextLine().trim();
+                            _line = _scan.nextLine().trim();
                         }
                     }
                 }
-                z.finishRead();
-                World w = null;
+                _zone.finishRead();
+                World _world = null;
                 for (World wor : Bukkit.getWorlds()) {
-                    if (wor.getName().equals(z.getWorld())) {
-                        w = wor;
+                    if (wor.getName().equals(_zone.getWorld())) {
+                        _world = wor;
                     }
                 }
-                if (w == null) {
-                    w = new WorldCreator(z.getWorld()).createWorld();
+                if (_world == null) {
+                    _world = new WorldCreator(_zone.getWorld()).createWorld();
                 }
-                if (zones.containsKey(w.getUID())) {
-                    zones.get(w.getUID()).add(z);
+                if (getZones().containsKey(_world.getUID())) {
+                    getZones().get(_world.getUID()).add(_zone);
                 } else {
-                    zones.put(w.getUID(), new ArrayList<Zone>());
-                    zones.get(w.getUID()).add(z);
+                    getZones().put(_world.getUID(), new ArrayList<Zone>());
+                    getZones().get(_world.getUID()).add(_zone);
                 }
             } else {
-                if (!s.hasNext()) {
+                if (!_scan.hasNext()) {
                     break;
                 }
-                line = s.nextLine().trim();
+                _line = _scan.nextLine().trim();
             }
         }
-        s.close();
+        _scan.close();
         VoxelBorder.log.info("[VoxelBorder] Configuration loaded!");
     }
 }
