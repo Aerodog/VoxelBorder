@@ -42,6 +42,15 @@ public class BorderListener implements Listener {
 	public static void setZones(TreeMap<UUID, ArrayList<Zone>> zones) {
 		BorderListener.zones = zones;
 	}
+	public static void addZone(UUID worldID, Zone newZone) {
+		if(zones.containsKey(worldID)) {
+			zones.get(worldID).add(newZone);
+		} else {
+			ArrayList<Zone> newWorld = new ArrayList<Zone>();
+			newWorld.add(newZone);
+			zones.put(worldID, newWorld);
+		}
+	}
 
 	public void init() {
         try {

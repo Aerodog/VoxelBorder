@@ -3,7 +3,6 @@ package com.thevoxelbox.voxelborder;
 import com.thevoxelbox.voxelborder.util.VoxelAdminUtil;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,19 +43,14 @@ public class VoxelBorder extends JavaPlugin {
             Player _player = (Player) sender;
 
             if ((_commandName.equals("voxelborder") || _commandName.equals("vborder"))
-                    && VoxelAdminUtil.contains(VoxelAdminUtil.getListID("admns"), _player.getName())) {
+                    && (_player.isOp() ? true : _player.hasPermission("voxelborder.edit"))) {
                 if (args != null && args.length > 0) {
                     if (args[0].equalsIgnoreCase("create")) {
                         if (args.length == 6) {
                             final Zone newZone = new Zone(args[1]);
                             newZone.setBound(_player.getWorld().getBlockAt(Integer.parseInt(args[2]), 64, Integer.parseInt(args[3])), _player.getWorld().getBlockAt(Integer.parseInt(args[4]), 64, Integer.parseInt(args[5])));
                             newZone.setWorld(_player.getWorld().getName());
-                            if (BorderListener.getZones().containsKey(_player.getWorld().getUID())) {
-                                BorderListener.getZones().get(_player.getWorld().getUID()).add(newZone);
-                            } else {
-                                BorderListener.getZones().put(_player.getWorld().getUID(), new ArrayList<Zone>());
-                                BorderListener.getZones().get(_player.getWorld().getUID()).add(newZone);
-                            }
+                            BorderListener.addZone(_player.getWorld().getUID(), newZone);
                             try {
                                 BorderListener.saveData();
                                 _player.sendMessage(ChatColor.GREEN + "New border created!");
@@ -66,16 +60,15 @@ public class VoxelBorder extends JavaPlugin {
                             }
                             return true;
                         } else {
-                            _player.sendMessage("Not enough parameters /.. create name x z x z");
+                            _player.sendMessage("Not enough parameters /vBorder create name x z x z");
                             return true;
                         }
                     }
                 } else {
-                    _player.sendMessage("Derp herp something");
                     return true;
                 }
             }
-            if ((_commandName.equalsIgnoreCase("btp")) && (VoxelAdminUtil.hasList("admins") ? VoxelAdminUtil.contains(VoxelAdminUtil.getListID("admns"), _player.getName()) : false)) {
+            if ((_commandName.equalsIgnoreCase("btp")) && (_player.isOp() ? true : _player.hasPermission("voxelborder.btp"))) {
                 if (args != null && args.length > 0) {
 
                     List<Player> l = Bukkit.matchPlayer(args[0]);
