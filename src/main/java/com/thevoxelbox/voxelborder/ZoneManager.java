@@ -19,19 +19,24 @@ import com.google.gson.Gson;
  * @author TheCryoknight
  */
 public class ZoneManager {
+	private static final File ZONE_FILE = new File("plugins/voxelborder/zones.json");
 	private static ZoneManager manager;
 
 	public static synchronized ZoneManager getManager() {
 		if (manager == null) {
-			manager = new ZoneManager(null);
+			manager = new ZoneManager();
 		}
 		return manager;
 	}
 	private final String bacePerm = "voxelborder.zone.";
 
 	private Set<Zone> zones = new HashSet<Zone>();
-	private ZoneManager(File zoneFile) {
-		readZones(zoneFile);
+	private ZoneManager() {
+		File zoneFolder = new File("plugins/voxelborder/");
+		if (!zoneFolder.exists()) {
+			zoneFolder.mkdirs();
+		}
+		readZones(ZONE_FILE);
 	}
 
 	public void addZone(Zone newZone) {
@@ -124,5 +129,9 @@ public class ZoneManager {
 				pw.close(); 
 			}
 		}
+	}
+
+	public static File getZoneFile() {
+		return ZONE_FILE;
 	}
 }

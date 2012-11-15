@@ -110,6 +110,7 @@ public class VoxelBorder extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		ZoneManager.getManager().saveZones(ZoneManager.getZoneFile());
 	}
 
 	@Override
