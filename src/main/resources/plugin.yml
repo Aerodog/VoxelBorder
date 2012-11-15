@@ -2,7 +2,7 @@ name: VoxelBorder
 main: com.thevoxelbox.voxelborder.VoxelBorder
 version: maven-version-number
 website: http://thevoxelbox.com
-author: przerwap
+author: TheCryoknight przerwap
 description: >
              Limit your world by adding a border!
 commands:
@@ -14,4 +14,4 @@ commands:
     description: Needs a description.
     usage: |
            /<command>
-           Example: /<command> - need to write the help.
+           Example: /<command> - Need to write help
