@@ -1,5 +1,6 @@
 package com.thevoxelbox.voxelborder;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import org.bukkit.Location;
@@ -7,11 +8,13 @@ import org.bukkit.block.Block;
 
 
 /**
- *
+ * Represents a 2D Rectangle 
+ * 
  * @author Voxel
  */
-public class Zone {
-
+public class Zone implements Serializable {
+	
+	private static final long serialVersionUID = -640268786266506912L;
 	private String zoneName;
 	private UUID worldID;
 	private final int lowX;
@@ -27,8 +30,6 @@ public class Zone {
 		this.lowZ = lowZ;
 		this.highX = highX;
 		this.highZ = highZ;
-
-
 	}
 
 	public Zone(final String zoneName, final Location point1, final Location point2) {
@@ -78,9 +79,5 @@ public class Zone {
 
 	public boolean inBound(Location l) {
 		return (this.lowX <= l.getX()) && (this.lowZ <= l.getZ()) && (l.getX() <= this.highX) && (l.getZ() <= this.highZ);
-	}
-
-	public void setSelection(Block b1, Block b2) {
-
 	}
 }

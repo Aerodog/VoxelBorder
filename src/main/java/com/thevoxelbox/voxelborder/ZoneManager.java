@@ -1,11 +1,17 @@
 package com.thevoxelbox.voxelborder;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+
+import com.google.gson.Gson;
 
 /**
  * Handles all currently active zones.
@@ -25,7 +31,7 @@ public class ZoneManager {
 
 	private Set<Zone> zones = new HashSet<Zone>();
 	private ZoneManager(File zoneFile) {
-
+		readZones(zoneFile);
 	}
 
 	public void addZone(Zone newZone) {
@@ -34,12 +40,12 @@ public class ZoneManager {
 
 	public boolean canMoveTo(Player player, Location startLoc, Location endLoc) {
 		for(Zone zone : this.zones) {
-			if(zone.getWorldID().equals(endLoc.getWorld().getUID())) {
-				if(zone.inBound(endLoc)) {
+			if (zone.getWorldID().equals(endLoc.getWorld().getUID())) {
+				if (zone.inBound(endLoc)) {
 					if (zone.inBound(startLoc)) {
 						return true;
 					}
-					if(player.hasPermission(this.bacePerm + zone.getName().replaceAll(" ", ""))) {
+					if (player.hasPermission(this.bacePerm + zone.getName().replaceAll(" ", ""))) {
 						player.sendMessage("Now crossing border of " + zone.getName().trim());
 						return true;
 					} else {
@@ -53,17 +59,70 @@ public class ZoneManager {
 	}
 
 	public void readZones(File zoneFile) {
-
-	}
-
-	public void removeZone(Zone oldZone) {
-		if(this.zones.contains(oldZone)) {
-			this.zones.remove(oldZone);
+		Gson gson = new Gson();
+		if (zoneFile.exists()) {
+			Scanner scan;
+			try {
+				scan = new Scanner(zoneFile);
+			} catch (FileNotFoundException e) {
+				VoxelBorder.log.severe("Can not open config files");
+				e.printStackTrace();
+				return;
+			}
+			try {
+				
+					while(scan.hasNext()) {
+						 Zone zone = gson.fromJson(scan.nextLine(), Zone.class);
+						 zones.add(zone);
+					}
+			} catch (Exception e) {
+				VoxelBorder.log.severe("Can not read config files");
+				e.printStackTrace();
+				return;
+			} finally {
+				scan.close();
+			}
 		} else {
-			VoxelBorder.log.warning("Cannot remove region, region not found.");
+			
 		}
 	}
-	public void saveZones(File zoneFile) {
 
+	public boolean removeZone(Zone oldZone) {
+		return this.zones.remove(oldZone);
+	}
+	public void saveZones(File zonefile) {
+		Gson gson = new Gson();
+		if(zonefile.exists()) {
+			try {
+				zonefile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+				return;
+			}
+		} else {
+			if (!zonefile.delete()) {
+				VoxelBorder.log.severe("Can not save config files");
+			}
+			try {
+				zonefile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+				return;
+			}
+		}
+		PrintWriter pw;
+		try {
+			pw = new PrintWriter(zonefile);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+		for(Zone z : this.zones) {
+			try {
+				pw.print(gson.toJson(z) + "\n");
+			} finally {
+				pw.close(); 
+			}
+		}
 	}
 }
