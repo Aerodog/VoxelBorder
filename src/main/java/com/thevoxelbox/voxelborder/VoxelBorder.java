@@ -1,10 +1,6 @@
 package com.thevoxelbox.voxelborder;
 
-import com.thevoxelbox.voxelborder.util.VoxelAdminUtil;
-
-import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -19,107 +15,104 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class VoxelBorder extends JavaPlugin {
 
-    public static final Logger log = Logger.getLogger("Minecraft");
-    private BorderListener bListner = new BorderListener();
-    private BorderVehicle bVehicleListener = new BorderVehicle();
+	public static final Logger log = Logger.getLogger("Minecraft");
+	private BorderListener bListner = new BorderListener();
 
-    public void onDisable() {
-    }
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
+		String _commandName = command.getName().toLowerCase();
 
-    public void onEnable() {
-        VoxelAdminUtil.readList("plugins/admns.txt", "admns");
-        Bukkit.getPluginManager().registerEvents(bListner, this);
-        Bukkit.getPluginManager().registerEvents(bVehicleListener, this);
-        bListner.init();
-        PluginDescriptionFile pdfFile = this.getDescription();
-        log.info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
-    }
+		if (sender instanceof Player) {
+			Player _player = (Player) sender;
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
-        String _commandName = command.getName().toLowerCase();
+			if ((_commandName.equals("voxelborder") || _commandName.equals("vborder"))
+					&& (_player.isOp() ? true : _player.hasPermission("voxelborder.editzones"))) {
+				if ((args != null) && (args.length > 0)) {
+					if (args[0].equalsIgnoreCase("create")) {
+						if (args.length == 6) {
+							final int _x1, _z1, _x2, _z2;
+							try {
+								_x1 = Integer.parseInt(args[2]);
+								_z1 = Integer.parseInt(args[3]);
+								_x2 = Integer.parseInt(args[4]);
+								_z2 = Integer.parseInt(args[5]);
+							} catch(Exception e) {
+								sender.sendMessage("Incorrect parameters /vBorder <create:remove> [name] x z x z");
+								return true;
+							}
+							ZoneManager.getManager().addZone(new Zone(args[1], _x1, _z1, _x2, _z2, _player.getWorld().getUID()));
+						} else {
+							_player.sendMessage("Not enough parameters /vBorder <create:remove> [name] x z x z");
+							return true;
+						}
+					}
+				} else {
+					return true;
+				}
+			}
+			if ((_commandName.equalsIgnoreCase("btp")) && (_player.isOp() ? true : _player.hasPermission("voxelborder.btp"))) {
+				if ((args != null) && (args.length > 0)) {
 
-        if (sender instanceof Player) {
-            Player _player = (Player) sender;
+					List<Player> l = Bukkit.matchPlayer(args[0]);
+					if (l.size() > 1) {
+						_player.sendMessage(ChatColor.RED + "Partial match");
+					} else if (l.isEmpty()) {
+						_player.sendMessage(ChatColor.RED + "No player to match");
+					} else {
+						Player pl = l.get(0);
+						Location _loc = pl.getLocation();
 
-            if ((_commandName.equals("voxelborder") || _commandName.equals("vborder"))
-                    && (_player.isOp() ? true : _player.hasPermission("voxelborder.edit"))) {
-                if (args != null && args.length > 0) {
-                    if (args[0].equalsIgnoreCase("create")) {
-                        if (args.length == 6) {
-                            final Zone newZone = new Zone(args[1]);
-                            newZone.setBound(_player.getWorld().getBlockAt(Integer.parseInt(args[2]), 64, Integer.parseInt(args[3])), _player.getWorld().getBlockAt(Integer.parseInt(args[4]), 64, Integer.parseInt(args[5])));
-                            newZone.setWorld(_player.getWorld().getName());
-                            BorderListener.addZone(_player.getWorld().getUID(), newZone);
-                            try {
-                                BorderListener.saveData();
-                                _player.sendMessage(ChatColor.GREEN + "New border created!");
-                            } catch (FileNotFoundException ex) {
-                                _player.sendMessage(ChatColor.RED + "Error saving borders!");
-                                Logger.getLogger(VoxelBorder.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            return true;
-                        } else {
-                            _player.sendMessage("Not enough parameters /vBorder create name x z x z");
-                            return true;
-                        }
-                    }
-                } else {
-                    return true;
-                }
-            }
-            if ((_commandName.equalsIgnoreCase("btp")) && (_player.isOp() ? true : _player.hasPermission("voxelborder.btp"))) {
-                if (args != null && args.length > 0) {
+						_player.sendMessage(ChatColor.AQUA + "Woosh!");
 
-                    List<Player> l = Bukkit.matchPlayer(args[0]);
-                    if (l.size() > 1) {
-                        _player.sendMessage(ChatColor.RED + "Partial match");
-                    } else if (l.isEmpty()) {
-                        _player.sendMessage(ChatColor.RED + "No player to match");
-                    } else {
-                        Player pl = l.get(0);
-                        Location _loc = pl.getLocation();
+						if (args.length < 2) {
+							_player.teleport(_loc, TeleportCause.ENDER_PEARL);
+						} else {
+							if (args[1].matches("me")) {
+								pl.sendMessage(ChatColor.DARK_AQUA + "Woosh!");
+								pl.teleport(_player.getLocation(), TeleportCause.ENDER_PEARL);
+								return true;
+							}
 
-                        _player.sendMessage(ChatColor.AQUA + "Woosh!");
+							for (int _i = 1; _i < args.length; _i++) {
+								try {
+									if (args[_i].startsWith("x")) {
+										_loc.setX(_loc.getX() + Double.parseDouble(args[_i].replace("x", "")));
+										continue;
+									} else if (args[_i].startsWith("y")) {
+										_loc.setY(_loc.getY() + Double.parseDouble(args[_i].replace("y", "")));
+										continue;
+									} else if (args[_i].startsWith("z")) {
+										_loc.setZ(_loc.getZ() + Double.parseDouble(args[_i].replace("z", "")));
+										continue;
+									}
+								} catch (NumberFormatException e) {
+									_player.sendMessage(ChatColor.RED + "Error parsing argument \"" + args[_i] + "\"");
+									return true;
+								}
+							}
 
-                        if (args.length < 2) {
-                            _player.teleport(_loc, TeleportCause.ENDER_PEARL);
-                        } else {
-                            if (args[1].matches("me")) {
-                                pl.sendMessage(ChatColor.DARK_AQUA + "Woosh!");
-                                pl.teleport(_player.getLocation(), TeleportCause.ENDER_PEARL);
-                                return true;
-                            }
+							_player.teleport(_loc, TeleportCause.ENDER_PEARL);
+						}
+					}
+					return true;
+				} else {
+					_player.sendMessage(ChatColor.LIGHT_PURPLE + "Please specify the target player");
+					return true;
+				}
+			}
+			return false;
+		}
+		return false;
+	}
 
-                            for (int _i = 1; _i < args.length; _i++) {
-                                try {
-                                    if (args[_i].startsWith("x")) {
-                                        _loc.setX(_loc.getX() + Double.parseDouble(args[_i].replace("x", "")));
-                                        continue;
-                                    } else if (args[_i].startsWith("y")) {
-                                        _loc.setY(_loc.getY() + Double.parseDouble(args[_i].replace("y", "")));
-                                        continue;
-                                    } else if (args[_i].startsWith("z")) {
-                                        _loc.setZ(_loc.getZ() + Double.parseDouble(args[_i].replace("z", "")));
-                                        continue;
-                                    }
-                                } catch (NumberFormatException e) {
-                                    _player.sendMessage(ChatColor.RED + "Error parsing argument \"" + args[_i] + "\"");
-                                    return true;
-                                }
-                            }
+	@Override
+	public void onDisable() {
+	}
 
-                            _player.teleport(_loc, TeleportCause.ENDER_PEARL);
-                        }
-                    }
-                    return true;
-                } else {
-                    _player.sendMessage(ChatColor.LIGHT_PURPLE + "Please specify the target player");
-                    return true;
-                }
-            }
-            return false;
-        }
-        return false;
-    }
+	@Override
+	public void onEnable() {
+		Bukkit.getPluginManager().registerEvents(this.bListner, this);
+		PluginDescriptionFile pdfFile = this.getDescription();
+		log.info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
+	}
 }
