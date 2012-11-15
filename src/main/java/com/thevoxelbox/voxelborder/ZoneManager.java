@@ -1,7 +1,6 @@
 package com.thevoxelbox.voxelborder;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashSet;
@@ -14,7 +13,8 @@ import org.bukkit.entity.Player;
 import com.google.gson.Gson;
 
 /**
- * Handles all currently active zones.
+ * Handles all currently active zones. 
+ * Also handles serialization.
  * 
  * @author TheCryoknight
  */
@@ -50,7 +50,7 @@ public class ZoneManager {
 					if (zone.inBound(startLoc)) {
 						return true;
 					}
-					if (player.hasPermission(this.bacePerm + zone.getName().replaceAll(" ", ""))) {
+					if (player.isOp() ? true : player.hasPermission(this.bacePerm + zone.getName().replaceAll(" ", ""))) {
 						player.sendMessage("Now crossing border of " + zone.getName().trim());
 						return true;
 					} else {
@@ -60,6 +60,7 @@ public class ZoneManager {
 				}
 			}
 		}
+		player.sendMessage("You can not access area outside of the the borders");
 		return false;
 	}
 
@@ -69,17 +70,16 @@ public class ZoneManager {
 			Scanner scan;
 			try {
 				scan = new Scanner(zoneFile);
-			} catch (FileNotFoundException e) {
+			} catch (Exception e) {
 				VoxelBorder.log.severe("Can not open config files");
 				e.printStackTrace();
 				return;
 			}
 			try {
-				
-					while(scan.hasNext()) {
-						 Zone zone = gson.fromJson(scan.nextLine(), Zone.class);
-						 zones.add(zone);
-					}
+				while(scan.hasNext()) {
+					Zone zone = gson.fromJson(scan.nextLine(), Zone.class);
+					zones.add(zone);
+				}
 			} catch (Exception e) {
 				VoxelBorder.log.severe("Can not read config files");
 				e.printStackTrace();

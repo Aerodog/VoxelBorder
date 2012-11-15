@@ -10,7 +10,8 @@ import org.bukkit.block.Block;
 /**
  * Represents a 2D Rectangle 
  * 
- * @author Voxel
+ * @author TheCryoknight
+ * 
  */
 public class Zone implements Serializable {
 	
@@ -21,7 +22,6 @@ public class Zone implements Serializable {
 	private final int lowZ;
 	private final int highX;
 	private final int highZ;
-
 
 	public Zone(final String zoneName, final int lowX, final int lowZ, final int highX, final int highZ, UUID worldID) {
 		this.worldID = worldID;
