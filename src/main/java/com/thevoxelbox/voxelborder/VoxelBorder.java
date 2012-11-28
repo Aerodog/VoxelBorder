@@ -48,6 +48,19 @@ public class VoxelBorder extends JavaPlugin {
 							player.sendMessage("Not enough parameters /vBorder <create:remove> [name] x z x z");
 							return true;
 						}
+					} if (args[0].equalsIgnoreCase("remove")) {
+						if(args.length == 2) {
+							Zone oldZone = ZoneManager.getManager().getZone(args[1]);
+							if(oldZone != null) {
+								ZoneManager.getManager().removeZone(oldZone);
+								return true;
+							} else {
+								player.sendMessage("No zone found by name: " + args[1]);
+							}
+						} else {
+							player.sendMessage("Incorrect parameters /vBorder <create:remove> [name] x z x z");
+							return true;
+						}
 					}
 				} else {
 					return true;

@@ -91,6 +91,15 @@ public class ZoneManager {
 			
 		}
 	}
+	
+	public Zone getZone(String zoneName) {
+		for(Zone z : zones) {
+			if(z.getName().equalsIgnoreCase(zoneName)) {
+				return z;
+			}
+		}
+		return null;
+	}
 
 	public boolean removeZone(Zone oldZone) {
 		return this.zones.remove(oldZone);
