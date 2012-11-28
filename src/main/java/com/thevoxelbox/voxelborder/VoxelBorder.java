@@ -29,8 +29,11 @@ public class VoxelBorder extends JavaPlugin {
 			if(args.length > 0) {
 				if(args.length == 1) {
 					List<String> tabList = new ArrayList<String>();
-					if(args[0].startsWith("c")) {
+					if(args[0].toLowerCase().startsWith("c")) {
 						tabList.add("create");
+						return tabList;
+					} else if(args[0].startsWith("r")) {
+						tabList.add("remove");
 						return tabList;
 					}
 				}

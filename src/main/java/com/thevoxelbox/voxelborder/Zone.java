@@ -95,9 +95,6 @@ public class Zone implements Serializable {
 			return;
 		}
 	}
-	public void finishRead() {
-		VoxelBorder.log.info("[VoxelBorder] Border \"" + this.zoneName + "\" has been loaded!");
-	}
 
 	public int getLowX() {
 		return this.lowX;
@@ -123,15 +120,34 @@ public class Zone implements Serializable {
 		return this.highZ;
 	}
 
+	/**
+	 * Checks if a block is located inside of this region.
+	 * 
+	 * @param b Block to check
+	 * @return True if inside region
+	 */
 	public boolean inBound(Block b) {
 		return (this.lowX <= b.getX()) && (this.lowZ <= b.getZ()) && (b.getX() <= this.highX) && (b.getZ() <= this.highZ);
 	}
 
+	/**
+	 * Checks if a X and Z coordinate is inside a region.
+	 * 
+	 * @param x X coordinate to check
+	 * @param z Z coordinate to check
+	 * @return True if inside region
+	 */
 	public boolean inBound(int x, int z) {
 		return (this.lowX <= x) && (this.lowZ <= z) && (x <= this.highX) && (z <= this.highZ);
 	}
 
-	public boolean inBound(Location l) {
-		return (this.lowX <= l.getX()) && (this.lowZ <= l.getZ()) && (l.getX() <= this.highX) && (l.getZ() <= this.highZ);
+	/**
+	 * Checks if a location is inside of this region.
+	 * 
+	 * @param loc Location to check
+	 * @return True if inside region
+	 */
+	public boolean inBound(Location loc) {
+		return (this.lowX <= loc.getX()) && (this.lowZ <= loc.getZ()) && (loc.getX() <= this.highX) && (loc.getZ() <= this.highZ);
 	}
 }

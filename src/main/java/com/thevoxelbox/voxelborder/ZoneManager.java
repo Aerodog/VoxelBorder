@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 
 /**
  * Handles all currently active zones. 
- * Also handles serialization.
+ * Also handles zone serialization.
  * 
  * @author TheCryoknight
  */
@@ -40,11 +40,23 @@ public class ZoneManager {
 		}
 		readZones(ZONE_FILE);
 	}
-
+	/**
+	 * Adds a zone to the active list
+	 * 
+	 * @param newZone Zone to add
+	 */
 	public void addZone(Zone newZone) {
 		this.zones.add(newZone);
 	}
 
+	/**
+	 * Checks to see if a player can move from a location to another location.
+	 * 
+	 * @param player The player moving
+	 * @param startLoc Originating location
+	 * @param endLoc Ending location
+	 * @return True if the specified player can move
+	 */
 	public boolean canMoveTo(Player player, Location startLoc, Location endLoc) {
 		for(Zone zone : this.zones) {
 			if (zone.getWorldID().equals(endLoc.getWorld().getUID())) {
@@ -93,7 +105,12 @@ public class ZoneManager {
 			
 		}
 	}
-	
+	/**
+	 * Searches the names of all the active zones and returns a list of all the zones that start with the search term.
+	 * 
+	 * @param str the search term
+	 * @return A list of strings that start with the search term
+	 */
 	public List<String> lookupZone(String str) {
 		List<String> matches = new ArrayList<String>();
 		for(Zone z : zones) {
@@ -112,6 +129,12 @@ public class ZoneManager {
 		return null;
 	}
 
+	/**
+	 * Removes a zone from the active list
+	 * 
+	 * @param oldZone Zone to remove
+	 * @return true if successfully removed
+	 */
 	public boolean removeZone(Zone oldZone) {
 		return this.zones.remove(oldZone);
 	}
