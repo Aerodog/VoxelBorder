@@ -3,7 +3,9 @@ package com.thevoxelbox.voxelborder;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -92,6 +94,15 @@ public class ZoneManager {
 		}
 	}
 	
+	public List<String> lookupZone(String str) {
+		List<String> matches = new ArrayList<String>();
+		for(Zone z : zones) {
+			if(z.getName().toLowerCase().startsWith(str)) {
+				matches.add(z.getName());
+			}
+		}
+		return matches.isEmpty() ? null : matches;
+	}
 	public Zone getZone(String zoneName) {
 		for(Zone z : zones) {
 			if(z.getName().equalsIgnoreCase(zoneName)) {

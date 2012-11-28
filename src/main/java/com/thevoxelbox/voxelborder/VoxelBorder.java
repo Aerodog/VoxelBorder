@@ -1,5 +1,6 @@
 package com.thevoxelbox.voxelborder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -22,13 +23,34 @@ public class VoxelBorder extends JavaPlugin {
 		
 	}
 	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		String commandName = command.getName().toLowerCase();
+		if (commandName.equalsIgnoreCase("voxelborder") || commandName.equalsIgnoreCase("vborder")) {
+			if(args.length > 0) {
+				if(args.length == 1) {
+					List<String> tabList = new ArrayList<String>();
+					if(args[0].startsWith("c")) {
+						tabList.add("create");
+						return tabList;
+					}
+				}
+				if(args.length == 2) {
+					if(args[0].equalsIgnoreCase("remove")) {
+						return ZoneManager.getManager().lookupZone(args[1].toLowerCase());
+					}
+				}
+			}
+		}
+        return null;
+    }
+	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
 		String commandName = command.getName().toLowerCase();
 
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 
-			if ((commandName.equals("voxelborder") || commandName.equals("vborder"))
+			if ((commandName.equalsIgnoreCase("voxelborder") || commandName.equalsIgnoreCase("vborder"))
 					&& (player.isOp() ? true : player.hasPermission("voxelborder.editzones"))) {
 				if ((args != null) && (args.length > 0)) {
 					if (args[0].equalsIgnoreCase("create")) {
