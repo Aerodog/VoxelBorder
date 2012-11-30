@@ -81,18 +81,18 @@ public class ZoneManager
                     }
                     if (player.isOp() ? true : player.hasPermission(this.basePerm + zone.getName().replaceAll(" ", "")))
                     {
-                        player.sendMessage("Now crossing border of " + zone.getName().trim());
+                        player.sendMessage("§cNow crossing border of " + zone.getName().trim());
                         return true;
                     }
                     else
                     {
-                        player.sendMessage("You can not cross the border of " + zone.getName().trim());
+                        player.sendMessage("§cYou can not cross the border of " + zone.getName().trim());
                         return false;
                     }
                 }
             }
         }
-        player.sendMessage("You can not access area outside of the the borders");
+        player.sendMessage("§cYou can not access area outside of the the borders");
         return false;
     }
 
