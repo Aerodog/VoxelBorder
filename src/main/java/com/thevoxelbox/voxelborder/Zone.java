@@ -3,6 +3,7 @@ package com.thevoxelbox.voxelborder;
 import java.io.Serializable;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
@@ -108,5 +109,10 @@ public class Zone implements Serializable
     {
         final Vector2D position = new Vector2D(loc.getX(), loc.getZ());
         return position.isInAB(this.min, this.max);
+    }
+    @Override
+    public String toString()
+    {
+        return ChatColor.GREEN + zoneName + ChatColor.GRAY + ":(" + this.min + ChatColor.GRAY +")(" + this.max + ChatColor.GRAY + ")";      
     }
 }

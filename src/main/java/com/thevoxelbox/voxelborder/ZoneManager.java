@@ -143,6 +143,20 @@ public class ZoneManager
         }
         return matches;
     }
+    /**
+    * Creates an array of strings that represent the active zones.
+    * 
+    * @return Array of the <code>toString()</code> of all the active zones
+    */
+    public String[] getZones() {
+    	final String[] zones = new String[this.zones.size() - 1];
+    	final Zone[] zArray = (Zone[]) this.zones.toArray();
+    	for (int i = 0; i < this.zones.size(); i++)
+    	{
+    		zones[i] = zArray[i].toString();
+    	}
+        return zones;
+    }
 
     public void readZones(final File zoneFile)
     {

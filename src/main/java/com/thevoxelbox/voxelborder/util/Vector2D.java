@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.util.NumberConversions;
@@ -594,7 +595,7 @@ public class Vector2D implements Cloneable, ConfigurationSerializable
     @Override
     public String toString()
     {
-        return this.x + "," + this.z;
+        return ChatColor.GREEN.toString() + this.x + ChatColor.GRAY + "," + ChatColor.GREEN + this.z;
     }
 
     /**

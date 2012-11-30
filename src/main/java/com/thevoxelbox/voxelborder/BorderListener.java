@@ -1,5 +1,6 @@
 package com.thevoxelbox.voxelborder;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -42,7 +43,13 @@ public class BorderListener implements Listener
                     event.setCancelled(true);
                     event.setUseItemInHand(Result.ALLOW);
                     final RangeBlockHelper rangeHelper = new RangeBlockHelper(event.getPlayer(), event.getPlayer().getWorld());
-                    event.getPlayer().teleport(rangeHelper.getCurBlock().getLocation().add(0, 1, 0), TeleportCause.PLUGIN);
+                    final Location curLoc = rangeHelper.getCurBlock().getLocation();
+                    while (!(curLoc.add(0, 1, 0).getBlock().isEmpty() && curLoc.add(0, 1, 0).getBlock().isEmpty()))
+                    {
+                        //Dam mutable location
+                        curLoc.add(0, 1, 0);
+                    }
+                    event.getPlayer().teleport(curLoc, TeleportCause.COMMAND);
                 }
             }
         }

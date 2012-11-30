@@ -72,7 +72,7 @@ public class VoxelBorder extends JavaPlugin
                             }
                             else
                             {
-                                player.sendMessage("§cNo zone found by name: " + args[1]);
+                                player.sendMessage(ChatColor.RED + "No zone found by name: " + args[1]);
                             }
                         }
                         else
@@ -114,6 +114,13 @@ public class VoxelBorder extends JavaPlugin
                             }
                         }
                     }
+                    if (args[0].equalsIgnoreCase("activezones"))
+                    	{
+                    	    for(String zone : this.zoneManager.getZones()) 
+                    	    {
+                    	        player.sendMessage(zone);
+                    	    }
+                    	}
                 }
                 else
                 {
