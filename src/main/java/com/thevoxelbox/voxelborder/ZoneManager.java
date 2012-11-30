@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -30,6 +31,7 @@ public class ZoneManager
 
     private final String basePerm = "voxelborder.zone.";
 
+    private final Set<UUID> activeWorlds = new HashSet<UUID>();
     private final Set<Zone> zones = new HashSet<Zone>();
 
     private final VoxelBorder plugin;
@@ -53,9 +55,10 @@ public class ZoneManager
      */
     public void addZone(final Zone newZone)
     {
+    	this.activeWorlds.add(newZone.getWorldID());
         this.zones.add(newZone);
     }
-
+    
     /**
      * Checks to see if a player can move from a location to another location.
      * 
@@ -69,6 +72,10 @@ public class ZoneManager
      */
     public boolean canMoveTo(final Player player, final Location startLoc, final Location endLoc)
     {
+        if (!activeWorlds.contains(endLoc.getWorld().getUID()))
+        {
+            return true;
+        }
         for (final Zone zone : this.zones)
         {
             if (zone.getWorldID().equals(endLoc.getWorld().getUID()))
@@ -81,28 +88,36 @@ public class ZoneManager
                     }
                     if (player.isOp() ? true : player.hasPermission(this.basePerm + zone.getName().replaceAll(" ", "")))
                     {
-                        player.sendMessage("§cNow crossing border of " + zone.getName().trim());
+                        player.sendMessage("§7Now crossing border of §a" + zone.getName().trim());
                         return true;
                     }
                     else
                     {
-                        player.sendMessage("§cYou can not cross the border of " + zone.getName().trim());
+                        player.sendMessage("§7You can not cross the border of §a" + zone.getName().trim());
                         return false;
                     }
                 }
             }
         }
-        player.sendMessage("§cYou can not access area outside of the the borders");
+        player.sendMessage("§7You can not access area outside of the the borders");
         return false;
     }
 
+    /**
+     * Searches all active zones for one that has the same name as <code>zoneName</code>.
+     * Note: This is not case sensitive
+     * 
+     * @param zoneName
+     *            Name of the zone to search
+     * @return Zone that is currently active and name matches the <code>zoneName</code>. will return null if no such zone exists.
+     */
     public Zone getZone(final String zoneName)
     {
-        for (final Zone z : this.zones)
+        for (final Zone zone : this.zones)
         {
-            if (z.getName().equalsIgnoreCase(zoneName))
+            if (zone.getName().equalsIgnoreCase(zoneName))
             {
-                return z;
+                return zone;
             }
         }
         return null;
@@ -118,11 +133,11 @@ public class ZoneManager
     public List<String> lookupZone(final String str)
     {
         final List<String> matches = new ArrayList<String>();
-        for (final Zone z : this.zones)
+        for (final Zone zone : this.zones)
         {
-            if (z.getName().toLowerCase().startsWith(str))
+            if (zone.getName().toLowerCase().startsWith(str))
             {
-                matches.add(z.getName());
+                matches.add(zone.getName());
             }
         }
         return matches.isEmpty() ? null : matches;
@@ -149,7 +164,7 @@ public class ZoneManager
                 while (scan.hasNext())
                 {
                     final Zone zone = gson.fromJson(scan.nextLine(), Zone.class);
-                    this.zones.add(zone);
+                    this.addZone(zone);
                 }
             }
             catch (final Exception e)

@@ -238,6 +238,10 @@ public class VoxelBorder extends JavaPlugin
                 }
             }
         }
+        if (tabCompletions.isEmpty())
+        {
+            return null;
+        }
         Collections.sort(tabCompletions);
         return tabCompletions;
     }
