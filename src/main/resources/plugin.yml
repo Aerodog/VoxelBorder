@@ -7,11 +7,8 @@ description: >
              Limit your world by adding a border!
 commands:
   voxelborder:
-    description: Sets the border.
-  vborder:
+    aliases: vborder
     description: Sets the border.
   btp:
-    description: Needs a description.
-    usage: |
-           /<command>
-           Example: /<command> - Need to write help
+    description: Border Teleport.
+    
