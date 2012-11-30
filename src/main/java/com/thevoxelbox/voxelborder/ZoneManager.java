@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
@@ -149,13 +150,13 @@ public class ZoneManager
     * @return Array of the <code>toString()</code> of all the active zones
     */
     public String[] getZones() {
-    	final String[] zones = new String[this.zones.size() - 1];
-    	final Zone[] zArray = (Zone[]) this.zones.toArray();
-    	for (int i = 0; i < this.zones.size(); i++)
+    	final List<String> zoneTxt = new ArrayList<String>();
+    	for (Zone zone : this.zones)
     	{
-    		zones[i] = zArray[i].toString();
+    		zoneTxt.add(zone.toString());
     	}
-        return zones;
+    	Collections.sort(zoneTxt);
+        return zoneTxt.toArray(new String[0]);
     }
 
     public void readZones(final File zoneFile)

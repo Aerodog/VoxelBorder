@@ -17,7 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class VoxelBorder extends JavaPlugin
 {
 
-    private static String[] commandCompletions = { "create", "remove", "edit" };
+    private static String[] commandCompletions = { "create", "remove", "edit", "activezones" };
 
     private ZoneManager zoneManager;
 
