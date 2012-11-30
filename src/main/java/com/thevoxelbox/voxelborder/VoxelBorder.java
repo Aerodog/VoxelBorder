@@ -231,10 +231,11 @@ public class VoxelBorder extends JavaPlugin
                 }
                 if (args.length == 2)
                 {
-                    if (args[0].equalsIgnoreCase("remove"))
+                    if (args[0].equalsIgnoreCase("remove") || args[0].equalsIgnoreCase("edit"))
                     {
                         tabCompletions.addAll(this.zoneManager.lookupZone(args[1].toLowerCase()));
                     }
+                    
                 }
             }
         }

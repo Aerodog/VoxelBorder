@@ -140,7 +140,7 @@ public class ZoneManager
                 matches.add(zone.getName());
             }
         }
-        return matches.isEmpty() ? null : matches;
+        return matches;
     }
 
     public void readZones(final File zoneFile)
