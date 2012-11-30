@@ -10,6 +10,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -55,10 +56,10 @@ public class ZoneManager
      */
     public void addZone(final Zone newZone)
     {
-    	this.activeWorlds.add(newZone.getWorldID());
+        this.activeWorlds.add(newZone.getWorldID());
         this.zones.add(newZone);
     }
-    
+
     /**
      * Checks to see if a player can move from a location to another location.
      * 
@@ -88,23 +89,23 @@ public class ZoneManager
                     }
                     if (player.isOp() ? true : player.hasPermission(this.basePerm + zone.getName().replaceAll(" ", "")))
                     {
-                        player.sendMessage("§7Now crossing border of §a" + zone.getName().trim());
+                        player.sendMessage(ChatColor.GRAY + "Now crossing border of " + ChatColor.GREEN + zone.getName().trim());
                         return true;
                     }
                     else
                     {
-                        player.sendMessage("§7You can not cross the border of §a" + zone.getName().trim());
+                        player.sendMessage(ChatColor.GRAY + "You can not cross the border of " + ChatColor.GREEN + zone.getName().trim());
                         return false;
                     }
                 }
             }
         }
-        player.sendMessage("§7You can not access area outside of the the borders");
+        player.sendMessage(ChatColor.GRAY + "You can not access area outside of the the borders");
         return false;
     }
 
     /**
-     * Searches all active zones for one that has the same name as <code>zoneName</code>.
+     * Searches all active zones for one that has the same name as <code>zoneName</code>. 
      * Note: This is not case sensitive
      * 
      * @param zoneName

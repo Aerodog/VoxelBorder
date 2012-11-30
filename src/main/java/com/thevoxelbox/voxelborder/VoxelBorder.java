@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -48,14 +49,14 @@ public class VoxelBorder extends JavaPlugin
                             }
                             catch (final Exception e)
                             {
-                                sender.sendMessage("§aIncorrect parameters §7/vBorder <create:remove:edit> [name] x z x z");
+                                sender.sendMessage(ChatColor.GREEN + "Incorrect parameters " + ChatColor.GRAY + "/vBorder <create:remove:edit> [name] x z x z");
                                 return true;
                             }
                             this.zoneManager.addZone(new Zone(args[1], x1, z1, x2, z2, player.getWorld().getUID()));
                         }
                         else
                         {
-                            player.sendMessage("§aIncorrect parameters §7/vBorder <create:remove:edit> [name] x z x z");
+                            player.sendMessage(ChatColor.GREEN + "Incorrect parameters " + ChatColor.GRAY + "/vBorder <create:remove:edit> [name] x z x z");
                             return true;
                         }
                     }
@@ -76,7 +77,7 @@ public class VoxelBorder extends JavaPlugin
                         }
                         else
                         {
-                            player.sendMessage("§aIncorrect parameters §7/vBorder <create:remove:edit> [name] x z x z");
+                            player.sendMessage(ChatColor.GREEN + "Incorrect parameters " + ChatColor.GRAY + "/vBorder <create:remove:edit> [name] x z x z");
                             return true;
                         }
                     }
@@ -86,9 +87,9 @@ public class VoxelBorder extends JavaPlugin
                         {
                             final Zone oldZone = this.zoneManager.getZone(args[1]);
                             if (oldZone != null)
-                    		{
-                            	final String zoneName = oldZone.getName();
-                            	final UUID worldID = oldZone.getWorldID();
+                            {
+                                final String zoneName = oldZone.getName();
+                                final UUID worldID = oldZone.getWorldID();
                                 final int x1, z1, x2, z2;
                                 try
                                 {
@@ -99,24 +100,24 @@ public class VoxelBorder extends JavaPlugin
                                 }
                                 catch (final Exception e)
                                 {
-                                    sender.sendMessage("§aIncorrect parameters §7/vBorder <create:remove:edit> [name] x z x z");
+                                    sender.sendMessage(ChatColor.GREEN + "Incorrect parameters " + ChatColor.GRAY + "/vBorder <create:remove:edit> [name] x z x z");
                                     return true;
                                 }
                                 this.zoneManager.removeZone(oldZone);
                                 this.zoneManager.addZone(new Zone(zoneName, x1, z1, x2, z2, worldID));
-                                
+
                             }
                             else
                             {
-                                player.sendMessage("§cNo zone named \"" + args[1] + "\" exists!");
+                                player.sendMessage(ChatColor.RED + "No zone named \"" + args[1] + "\" exists!");
                                 return true;
                             }
-                    	}
+                        }
                     }
                 }
                 else
                 {
-                    sender.sendMessage("§aIncorrect parameters §7/vBorder <create:remove:edit> [name] x z x z");
+                    sender.sendMessage(ChatColor.GREEN + "Incorrect parameters " + ChatColor.GRAY + "/vBorder <create:remove:edit> [name] x z x z");
                     return true;
                 }
             }
@@ -128,18 +129,18 @@ public class VoxelBorder extends JavaPlugin
                     final List<Player> matches = Bukkit.matchPlayer(args[0]);
                     if (matches.size() > 1)
                     {
-                        player.sendMessage("§cPartial match");
+                        player.sendMessage(ChatColor.RED + "Partial match");
                     }
                     else if (matches.isEmpty())
                     {
-                        player.sendMessage("§cNo player to match");
+                        player.sendMessage(ChatColor.RED + "No player to match");
                     }
                     else
                     {
                         final Player pl = matches.get(0);
                         final Location loc = pl.getLocation();
 
-                        player.sendMessage("§bWoosh!");
+                        player.sendMessage(ChatColor.AQUA + "Woosh!");
 
                         if (args.length < 2)
                         {
@@ -149,7 +150,7 @@ public class VoxelBorder extends JavaPlugin
                         {
                             if (args[1].matches("me"))
                             {
-                                pl.sendMessage("§bWoosh!");
+                                pl.sendMessage(ChatColor.AQUA + "Woosh!");
                                 pl.teleport(player.getLocation(), TeleportCause.ENDER_PEARL);
                                 return true;
                             }
@@ -176,7 +177,7 @@ public class VoxelBorder extends JavaPlugin
                                 }
                                 catch (final NumberFormatException e)
                                 {
-                                    player.sendMessage("§cError parsing argument \"" + args[i] + "\"");
+                                    player.sendMessage(ChatColor.RED + "Error parsing argument \"" + args[i] + "\"");
                                     return true;
                                 }
                             }
@@ -188,7 +189,7 @@ public class VoxelBorder extends JavaPlugin
                 }
                 else
                 {
-                    player.sendMessage("§dPlease specify the target player");
+                    player.sendMessage(ChatColor.LIGHT_PURPLE + "Please specify the target player");
                     return true;
                 }
             }
@@ -235,7 +236,7 @@ public class VoxelBorder extends JavaPlugin
                     {
                         tabCompletions.addAll(this.zoneManager.lookupZone(args[1].toLowerCase()));
                     }
-                    
+
                 }
             }
         }
