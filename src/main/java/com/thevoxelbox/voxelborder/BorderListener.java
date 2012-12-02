@@ -63,7 +63,7 @@ public class BorderListener implements Listener
     {
         if (!this.zoneManager.canMoveTo(event.getPlayer(), event.getFrom(), event.getTo()))
         {
-            event.getPlayer().teleport(event.getFrom(), TeleportCause.PLUGIN);
+            event.getPlayer().teleport(event.getFrom(), TeleportCause.ENDER_PEARL);
         }
     }
 

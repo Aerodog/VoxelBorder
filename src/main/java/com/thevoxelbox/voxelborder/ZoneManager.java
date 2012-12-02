@@ -84,7 +84,7 @@ public class ZoneManager
             {
                 if (zone.inBound(endLoc))
                 {
-                    if (zone.inBound(startLoc))
+                    if (zone.inBound(startLoc) && startLoc.getWorld().getUID().equals(endLoc.getWorld().getUID()))
                     {
                         return true;
                     }
@@ -147,7 +147,7 @@ public class ZoneManager
     /**
     * Creates an array of strings that represent the active zones.
     * 
-    * @return Array of the <code>toString()</code> of all the active zones
+    * @return Array of the <code>toString()</code> from all the active zones
     */
     public String[] getZones() {
     	final List<String> zoneTxt = new ArrayList<String>();
@@ -159,6 +159,17 @@ public class ZoneManager
         return zoneTxt.toArray(new String[0]);
     }
 
+    /**
+     * Removes a zone from the active list
+     * 
+     * @param oldZone
+     *            Zone to remove
+     * @return true if successfully removed
+     */
+    public boolean removeZone(final Zone oldZone)
+    {
+        return this.zones.remove(oldZone);
+    }
     public void readZones(final File zoneFile)
     {
         final Gson gson = new Gson();
@@ -177,7 +188,7 @@ public class ZoneManager
             }
             try
             {
-                while (scan.hasNext())
+                while (scan.hasNextLine())
                 {
                     final Zone zone = gson.fromJson(scan.nextLine(), Zone.class);
                     this.addZone(zone);
@@ -198,18 +209,6 @@ public class ZoneManager
         {
 
         }
-    }
-
-    /**
-     * Removes a zone from the active list
-     * 
-     * @param oldZone
-     *            Zone to remove
-     * @return true if successfully removed
-     */
-    public boolean removeZone(final Zone oldZone)
-    {
-        return this.zones.remove(oldZone);
     }
 
     public void saveZones(final File zonefile)
@@ -257,7 +256,7 @@ public class ZoneManager
         {
             try
             {
-                pw.print(gson.toJson(z) + "\n");
+                pw.println(gson.toJson(z));
             }
             finally
             {
