@@ -254,14 +254,8 @@ public class ZoneManager
         }
         for (final Zone z : this.zones)
         {
-            try
-            {
                 pw.println(gson.toJson(z));
-            }
-            finally
-            {
-                pw.close();
-            }
         }
+        pw.close();
     }
 }
