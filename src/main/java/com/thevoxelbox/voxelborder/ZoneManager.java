@@ -84,7 +84,7 @@ public class ZoneManager
             {
                 if (zone.inBound(endLoc))
                 {
-                    if (zone.inBound(startLoc) && startLoc.getWorld().getUID().equals(endLoc.getWorld().getUID()))
+                    if (zone.inBound(startLoc))
                     {
                         return true;
                     }

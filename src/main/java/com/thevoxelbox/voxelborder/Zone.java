@@ -80,7 +80,11 @@ public class Zone implements Serializable
      */
     public boolean inBound(final Block block)
     {
-        final Vector2D position = new Vector2D(block.getX(), block.getZ());
+        if(!block.getWorld().getUID().toString().equals(this.worldID.toString()))
+        {
+            return false;
+        }
+    	final Vector2D position = new Vector2D(block.getX(), block.getZ());
         return position.isInAB(this.min, this.max);
     }
 
@@ -108,7 +112,11 @@ public class Zone implements Serializable
      */
     public boolean inBound(final Location loc)
     {
-        final Vector2D position = new Vector2D(loc.getX(), loc.getZ());
+        if(!loc.getWorld().getUID().toString().equals(this.worldID.toString()))
+        {
+            return false;
+        }
+    	final Vector2D position = new Vector2D(loc.getX(), loc.getZ());
         return position.isInAB(this.min, this.max);
     }
     @Override
