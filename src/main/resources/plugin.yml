@@ -2,16 +2,13 @@ name: VoxelBorder
 main: com.thevoxelbox.voxelborder.VoxelBorder
 version: maven-version-number
 website: http://thevoxelbox.com
-author: przerwap
+authors: [TheCryoknight, przerwap]
 description: >
              Limit your world by adding a border!
 commands:
   voxelborder:
-    description: Sets the border.
-  vborder:
+    aliases: vborder
     description: Sets the border.
   btp:
-    description: Needs a description.
-    usage: |
-           /<command>
-           Example: /<command> - need to write the help.
+    description: Border Teleport.
+    
