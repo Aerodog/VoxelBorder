@@ -55,7 +55,7 @@ public class VoxelBorder extends JavaPlugin
                             Zone newZone = new Zone(args[1], x1, z1, x2, z2, player.getWorld().getUID());
                             this.zoneManager.addZone(newZone);
                             player.sendMessage(ChatColor.GRAY + "Zone successfully created!");
-                            this.getLogger().info("Player created border " + newZone);
+                            this.getLogger().info("Player created border " + ChatColor.stripColor(newZone.toString()));
                         }
                         else
                         {
@@ -248,7 +248,6 @@ public class VoxelBorder extends JavaPlugin
                     {
                         tabCompletions.addAll(this.zoneManager.lookupZone(args[1].toLowerCase()));
                     }
-
                 }
             }
         }

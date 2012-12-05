@@ -120,9 +120,8 @@ public class Zone implements Serializable
         return position.isInAB(this.min, this.max);
     }
     @Override
-    public String toString()
-    {
+    public String toString() {
         return ChatColor.GREEN + zoneName + ChatColor.GRAY + ":(" + this.min + ChatColor.GRAY +
-                ")(" + this.max + ChatColor.GRAY + ") in the world " + Bukkit.getWorld(worldID).getName();      
+                ")(" + this.max + ChatColor.GRAY + ") in the world " + ChatColor.GREEN  + Bukkit.getWorld(worldID).getName();      
     }
 }

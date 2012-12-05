@@ -74,12 +74,9 @@ public class BorderListener implements Listener
         {
             return;
         }
-        if (event.getFrom().getWorld().equals(event.getTo().getWorld()))
+        if (!this.zoneManager.canMoveTo(event.getPlayer(), event.getFrom(), event.getTo()))
         {
-            if (!this.zoneManager.canMoveTo(event.getPlayer(), event.getFrom(), event.getTo()))
-            {
-                event.setCancelled(true);
-            }
+            event.setCancelled(true);
         }
     }
 
