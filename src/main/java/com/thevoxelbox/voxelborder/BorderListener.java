@@ -70,6 +70,11 @@ public class BorderListener implements Listener
     @EventHandler
     public void onPlayerTeleport(final PlayerTeleportEvent event)
     {
+        if (event.getTo() == null)
+        {
+            event.setCancelled(true);
+            return;
+        }
         if (event.getCause().equals(TeleportCause.ENDER_PEARL))
         {
             return;
@@ -98,6 +103,9 @@ public class BorderListener implements Listener
     @EventHandler
     public void onVehicleMove(final VehicleMoveEvent event)
     {
+        if (event.getVehicle() == null) {
+        	return;
+        }
         if (event.getVehicle().getPassenger() instanceof Player)
         {
             final Player _player = ((Player) event.getVehicle().getPassenger());
@@ -105,7 +113,7 @@ public class BorderListener implements Listener
             {
                 final Entity entity = event.getVehicle().getPassenger();
                 event.getVehicle().eject();
-                entity.teleport(event.getFrom(), TeleportCause.PLUGIN);
+                entity.teleport(event.getFrom(), TeleportCause.ENDER_PEARL);
             }
         }
     }

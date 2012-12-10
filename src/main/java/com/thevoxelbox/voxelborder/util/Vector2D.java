@@ -590,12 +590,19 @@ public class Vector2D implements Cloneable, ConfigurationSerializable
     }
 
     /**
-     * Returns this vector's components as x,y,z.
+     * Returns this vector's components as "x,z". (Colored)
      */
-    @Override
+    public String toColoredString()
+    {
+        return ChatColor.GREEN.toString() + this.x + ChatColor.GRAY + ", " + ChatColor.GREEN + this.z;
+    }
+    
+    /**
+     * Returns this vector's components as "x,z".
+     */
     public String toString()
     {
-        return ChatColor.GREEN.toString() + this.x + ChatColor.GRAY + "," + ChatColor.GREEN + this.z;
+        return this.x  + ", " + this.z;
     }
 
     /**

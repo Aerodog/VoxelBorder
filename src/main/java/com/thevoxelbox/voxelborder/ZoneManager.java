@@ -147,13 +147,13 @@ public class ZoneManager
     /**
     * Creates an array of strings that represent the active zones.
     * 
-    * @return Array of the <code>toString()</code> from all the active zones
+    * @return Array of the <code>toColoredString()</code> from all the active zones
     */
     public String[] getZones() {
     	final List<String> zoneTxt = new ArrayList<String>();
     	for (Zone zone : this.zones)
     	{
-    		zoneTxt.add(zone.toString());
+    		zoneTxt.add(zone.toColoredString());
     	}
     	Collections.sort(zoneTxt);
         return zoneTxt.toArray(new String[0]);

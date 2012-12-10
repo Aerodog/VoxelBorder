@@ -72,6 +72,7 @@ public class VoxelBorder extends JavaPlugin
                             {
                                 this.zoneManager.removeZone(oldZone);
                                 player.sendMessage(ChatColor.GRAY + "Zone sucessfully removed");
+                                this.getLogger().info("Player removed zone " + ChatColor.stripColor(oldZone.toString()));
                                 return true;
                             }
                             else
@@ -109,8 +110,8 @@ public class VoxelBorder extends JavaPlugin
                                 }
                                 this.zoneManager.removeZone(oldZone);
                                 this.zoneManager.addZone(new Zone(zoneName, x1, z1, x2, z2, worldID));
-                                player.sendMessage(ChatColor.GRAY + "Zone sucessfully removed");
-
+                                player.sendMessage(ChatColor.GRAY + "Zone sucessfully edited");
+                                this.getLogger().info("Player edited zone " + oldZone.getName() + ", it is now " + this.zoneManager.getZone(oldZone.getName()));
                             }
                             else
                             {
