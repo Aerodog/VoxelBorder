@@ -119,8 +119,14 @@ public class Zone implements Serializable
     	final Vector2D position = new Vector2D(loc.getX(), loc.getZ());
         return position.isInAB(this.min, this.max);
     }
+    
+    @Override
+    public String toString() {
+        return zoneName + ":(" + this.min +")(" + this.max + ") in the world " + Bukkit.getWorld(worldID).getName();      
+    }
+    
     public String toColoredString() {
-        return ChatColor.GREEN + zoneName + ChatColor.GRAY + ":(" + this.min + ChatColor.GRAY +
-                ")(" + this.max + ChatColor.GRAY + ") in the world " + ChatColor.GREEN  + Bukkit.getWorld(worldID).getName();      
+        return ChatColor.GREEN + zoneName + ChatColor.GRAY + ":(" + this.min.toColoredString() + ChatColor.GRAY +
+                ")(" + this.max.toColoredString() + ChatColor.GRAY + ") in the world " + ChatColor.GREEN  + Bukkit.getWorld(worldID).getName();      
     }
 }
