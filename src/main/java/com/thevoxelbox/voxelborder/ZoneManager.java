@@ -54,11 +54,19 @@ public class ZoneManager
      * 
      * @param newZone
      *            Zone to add
+     * @return 
      */
-    public void addZone(final Zone newZone)
+    public boolean addZone(final Zone newZone)
     {
+        for (Zone zone : this.zones)
+        {
+            if (zone.getName().equalsIgnoreCase(newZone.getName()))
+            {
+                return false;
+            }
+        }
         this.activeWorlds.add(newZone.getWorldID());
-        this.zones.add(newZone);
+        return this.zones.add(newZone);
     }
 
     /**
@@ -158,6 +166,13 @@ public class ZoneManager
     	Collections.sort(zoneTxt);
         return zoneTxt.toArray(new String[0]);
     }
+    
+    private void updateActiveWorlds() {
+        this.activeWorlds.clear();
+        for (Zone zone : this.zones) {
+        	this.activeWorlds.add(zone.getWorldID());
+        }
+    }
 
     /**
      * Removes a zone from the active list
@@ -168,7 +183,9 @@ public class ZoneManager
      */
     public boolean removeZone(final Zone oldZone)
     {
-        return this.zones.remove(oldZone);
+        final boolean success = this.zones.remove(oldZone);
+        this.updateActiveWorlds();
+        return success;
     }
     public void readZones(final File zoneFile)
     {
