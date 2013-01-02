@@ -43,10 +43,12 @@ public class BorderListener implements Listener
                     event.setCancelled(true);
                     event.setUseItemInHand(Result.ALLOW);
                     final RangeBlockHelper rangeHelper = new RangeBlockHelper(event.getPlayer(), event.getPlayer().getWorld());
-                    final Location curLoc = rangeHelper.getCurBlock().getLocation();
-                    while (!(curLoc.add(0, 1, 0).getBlock().isEmpty() && curLoc.add(0, 1, 0).getBlock().isEmpty()))
+                    final Location curLoc = rangeHelper.getTargetBlock().getLocation();
+                    if (curLoc == null) {
+                        return;
+                    }
+                    while (!this.isValidJump(curLoc))
                     {
-                        //Dam mutable location
                         curLoc.add(0, 1, 0);
                     }
                     event.getPlayer().teleport(curLoc, TeleportCause.COMMAND);
@@ -56,6 +58,12 @@ public class BorderListener implements Listener
         catch (final Exception e)
         {
         }
+    }
+    
+    private boolean isValidJump(final Location jumpLoc)
+    {
+        Location locA = jumpLoc.clone(), locB = jumpLoc.clone().add(0, 1, 0);
+        return locA.getBlock().isEmpty() && locB.getBlock().isEmpty();
     }
 
     @EventHandler

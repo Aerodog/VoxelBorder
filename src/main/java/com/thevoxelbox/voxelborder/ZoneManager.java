@@ -158,19 +158,22 @@ public class ZoneManager
     * @return Array of the <code>toColoredString()</code> from all the active zones
     */
     public String[] getZones() {
-    	final List<String> zoneTxt = new ArrayList<String>();
-    	for (Zone zone : this.zones)
-    	{
-    		zoneTxt.add(zone.toColoredString());
-    	}
-    	Collections.sort(zoneTxt);
+        final List<String> zoneTxt = new ArrayList<String>();
+        for (Zone zone : this.zones)
+        {
+            zoneTxt.add(zone.toColoredString());
+        }
+        Collections.sort(zoneTxt);
         return zoneTxt.toArray(new String[0]);
     }
     
+    /**
+     * Refreshes all of the active worlds, this prevents a world witch has no more zones from being monitored
+     */
     private void updateActiveWorlds() {
         this.activeWorlds.clear();
         for (Zone zone : this.zones) {
-        	this.activeWorlds.add(zone.getWorldID());
+            this.activeWorlds.add(zone.getWorldID());
         }
     }
 
@@ -187,6 +190,7 @@ public class ZoneManager
         this.updateActiveWorlds();
         return success;
     }
+
     public void readZones(final File zoneFile)
     {
         final Gson gson = new Gson();
