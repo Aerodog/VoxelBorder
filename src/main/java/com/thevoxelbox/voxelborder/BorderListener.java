@@ -4,8 +4,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -14,6 +14,8 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import com.thevoxelbox.voxelborder.util.RangeBlockHelper;
 
@@ -31,7 +33,7 @@ public class BorderListener implements Listener
         this.zoneManager = zoneManager;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteract(final PlayerInteractEvent event)
     {
         try
@@ -40,18 +42,24 @@ public class BorderListener implements Listener
             {
                 if (event.getItem().getType().equals(Material.ENDER_PEARL))
                 {
-                    event.setCancelled(true);
-                    event.setUseItemInHand(Result.ALLOW);
-                    final RangeBlockHelper rangeHelper = new RangeBlockHelper(event.getPlayer(), event.getPlayer().getWorld());
-                    final Location curLoc = rangeHelper.getTargetBlock().getLocation();
-                    if (curLoc == null) {
-                        return;
-                    }
-                    while (!this.isValidJump(curLoc))
+                    if (!event.isCancelled()) //For compatibility with other plugins
                     {
-                        curLoc.add(0, 1, 0);
+                        event.setCancelled(true);
+                        this.useItem(event.getPlayer());
+
+                        final RangeBlockHelper rangeHelper = new RangeBlockHelper(event.getPlayer(), event.getPlayer().getWorld());
+                        final Location curLoc = rangeHelper.getTargetBlock().getLocation();
+
+                        if (curLoc == null) {
+                            return;
+                        }
+
+                        while (!this.isValidJump(curLoc))
+                        {
+                            curLoc.add(0, 1, 0);
+                        }
+                        event.getPlayer().teleport(curLoc, TeleportCause.COMMAND);
                     }
-                    event.getPlayer().teleport(curLoc, TeleportCause.COMMAND);
                 }
             }
         }
@@ -59,10 +67,40 @@ public class BorderListener implements Listener
         {
         }
     }
-    
+
+    /**
+     * Helps handling item use by removing one item from the stack the player is holding, and clearing the stack if only 1 remains.
+     * 
+     * @param player The player using a material
+     */
+    private void useItem(Player player)
+    {
+        final ItemStack hand = player.getItemInHand();
+        if (hand != null)
+        {
+            if (hand.getAmount() > 1) {
+                hand.setAmount(hand.getAmount() - 1);
+            }
+            else
+            {
+                final PlayerInventory inv = player.getInventory();
+                if (inv != null)
+                {
+                    inv.clear(inv.getHeldItemSlot());
+                }
+            }
+        }
+    }
+
+    /**
+     * Calculates whether of not a point is a valid jump destination
+     * 
+     * @param jumpLoc The destination of the jump
+     * @return True if valid
+     */
     private boolean isValidJump(final Location jumpLoc)
     {
-        Location locA = jumpLoc.clone(), locB = jumpLoc.clone().add(0, 1, 0);
+        final Location locA = jumpLoc.clone(), locB = jumpLoc.clone().add(0, 1, 0);
         return locA.getBlock().isEmpty() && locB.getBlock().isEmpty();
     }
 
@@ -112,7 +150,7 @@ public class BorderListener implements Listener
     public void onVehicleMove(final VehicleMoveEvent event)
     {
         if (event.getVehicle() == null) {
-        	return;
+            return;
         }
         if (event.getVehicle().getPassenger() instanceof Player)
         {
