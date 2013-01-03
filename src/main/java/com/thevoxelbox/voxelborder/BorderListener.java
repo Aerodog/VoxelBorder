@@ -44,9 +44,9 @@ public class BorderListener implements Listener
                 {
                     if (!event.isCancelled()) //For compatibility with other plugins
                     {
-                        if (event.getPlayer().isOp() ? true : event.getPlayer().hasPermission("voxelborder.enderpearl"))
+                        event.setCancelled(true);
+                    	if (event.getPlayer().isOp() ? true : event.getPlayer().hasPermission("voxelborder.enderpearl"))
                         {
-                            event.setCancelled(true);
                             this.useItem(event.getPlayer());
     
                             final RangeBlockHelper rangeHelper = new RangeBlockHelper(event.getPlayer(), event.getPlayer().getWorld());
