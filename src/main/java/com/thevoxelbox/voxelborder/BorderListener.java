@@ -44,21 +44,24 @@ public class BorderListener implements Listener
                 {
                     if (!event.isCancelled()) //For compatibility with other plugins
                     {
-                        event.setCancelled(true);
-                        this.useItem(event.getPlayer());
-
-                        final RangeBlockHelper rangeHelper = new RangeBlockHelper(event.getPlayer(), event.getPlayer().getWorld());
-                        final Location curLoc = rangeHelper.getTargetBlock().getLocation();
-
-                        if (curLoc == null) {
-                            return;
-                        }
-
-                        while (!this.isValidJump(curLoc))
+                        if (event.getPlayer().isOp() ? true : event.getPlayer().hasPermission("voxelborder.enderpearl"))
                         {
-                            curLoc.add(0, 1, 0);
+                            event.setCancelled(true);
+                            this.useItem(event.getPlayer());
+    
+                            final RangeBlockHelper rangeHelper = new RangeBlockHelper(event.getPlayer(), event.getPlayer().getWorld());
+                            final Location curLoc = rangeHelper.getTargetBlock().getLocation();
+
+                            if (curLoc == null) {
+                                return;
+                            }
+
+                            while (!this.isValidJump(curLoc))
+                            {
+                                curLoc.add(0, 1, 0);
+                            }
+                            event.getPlayer().teleport(curLoc, TeleportCause.COMMAND);
                         }
-                        event.getPlayer().teleport(curLoc, TeleportCause.COMMAND);
                     }
                 }
             }
