@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -45,6 +46,7 @@ public class BorderListener implements Listener
                     if (!event.isCancelled()) //For compatibility with other plugins
                     {
                         event.setCancelled(true);
+                        event.setUseItemInHand(Result.DENY);
                     	if (event.getPlayer().isOp() ? true : event.getPlayer().hasPermission("voxelborder.enderpearl"))
                         {
                             this.useItem(event.getPlayer());
