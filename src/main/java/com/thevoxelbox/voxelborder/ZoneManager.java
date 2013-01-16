@@ -86,29 +86,46 @@ public class ZoneManager
         {
             return true;
         }
+
+        boolean canEnter = true;
+        boolean inZone = false;
         for (final Zone zone : this.zones)
         {
             if (zone.getWorldID().equals(endLoc.getWorld().getUID()))
             {
                 if (zone.inBound(endLoc))
                 {
+                	inZone = true;
                     if (zone.inBound(startLoc))
                     {
-                        return true;
+                    	if (canEnter)
+                    	{
+                    		continue;
+                    	}
                     }
                     if (player.isOp() ? true : player.hasPermission(this.basePerm + zone.getName().replaceAll(" ", "")))
                     {
-                        player.sendMessage(ChatColor.GRAY + "Now crossing border of " + ChatColor.GREEN + zone.getName().trim());
-                        return true;
+                    	if (canEnter)
+                    	{
+                        	player.sendMessage(ChatColor.GRAY + "Now crossing border of " + ChatColor.GREEN + zone.getName().trim());
+                        	continue;
+                    	}
                     }
                     else
                     {
                         player.sendMessage(ChatColor.GRAY + "You can not cross the border of " + ChatColor.GREEN + zone.getName().trim());
-                        return false;
+                    	canEnter = false;
+                    	break;
                     }
                 }
             }
         }
+
+        if (inZone)
+        {
+        	return canEnter;
+        }
+
         player.sendMessage(ChatColor.GRAY + "You can not access area outside of the the borders");
         return false;
     }
