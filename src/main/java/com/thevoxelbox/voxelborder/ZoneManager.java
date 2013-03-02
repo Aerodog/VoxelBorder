@@ -82,6 +82,18 @@ public class ZoneManager
      */
     public boolean canMoveTo(final Player player, final Location startLoc, final Location endLoc)
     {
+        if (endLoc == null)
+        {
+            return true;
+        }
+        if (endLoc.getWorld() == null) 
+        {
+            return true;
+        }
+        if (endLoc.getWorld().getUID() == null) 
+        {
+            return true;
+        }
         if (!activeWorlds.contains(endLoc.getWorld().getUID()))
         {
             return true;
